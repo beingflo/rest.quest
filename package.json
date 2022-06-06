@@ -1,11 +1,14 @@
 {
   "name": "vite-template-solid",
+  "homepage": "https://beingflo.github.io/rest.quest",
   "version": "0.0.0",
   "description": "",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "serve": "vite preview"
+    "serve": "vite preview",
+    "predeploy": "yarn build",
+    "deploy": "gh-pages -d dist"
   },
   "license": "MIT",
   "devDependencies": {
@@ -17,6 +20,7 @@
     "vite-plugin-solid": "^2.2.6"
   },
   "dependencies": {
+    "gh-pages": "^4.0.0",
     "solid-js": "^1.4.2"
   }
 }
