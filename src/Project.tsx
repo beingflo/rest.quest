@@ -3,7 +3,12 @@ export type Props = {
 };
 
 const Project = (props: Props) => {
-  return <div class="">{props.name}</div>;
+  return (
+    <div class="group">
+      <div>{props.name}</div>
+      <div>Edit</div>
+    </div>
+  );
 };
 
 export default Project;
