@@ -10,7 +10,12 @@ const Projects = (props: Props) => {
     <div class="w-1/5 h-screen p-4 flex overflow-y-scroll">
       <div class="my-auto">
         <For each={props.projects}>
-          {(project) => <Project name={project} />}
+          {(project) => (
+            <Project
+              projectName={project}
+              setName={(name) => console.log(name)}
+            />
+          )}
         </For>
       </div>
     </div>
