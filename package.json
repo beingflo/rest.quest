@@ -21,6 +21,7 @@
   },
   "dependencies": {
     "gh-pages": "^4.0.0",
-    "solid-js": "^1.4.2"
+    "solid-js": "^1.4.2",
+    "tinykeys": "^1.4.0"
   }
 }
