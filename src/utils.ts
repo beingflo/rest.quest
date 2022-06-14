@@ -1,3 +1,3 @@
-export const validateEvent = (event) => {
-  return event.target.tagName.toLowerCase() !== 'input';
-};
+// Execute callback function if event did not target an input
+export const validateEvent = (callback) => (event) =>
+  event.target.tagName !== 'INPUT' && callback();

@@ -8,14 +8,8 @@ export type Props = {
 };
 
 const Projects: Component<Props> = (props) => {
-  const addNewProject = (event) => {
-    if (validateEvent(event)) {
-      console.log('adding project');
-    }
-  };
-
   tinykeys(window, {
-    l: addNewProject,
+    l: validateEvent(() => 'adding project'),
   });
 
   return (
