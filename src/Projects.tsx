@@ -1,11 +1,23 @@
 import { Component, For } from 'solid-js';
 import Project from './Project';
+import tinykeys from 'tinykeys';
+import { validateEvent } from './utils';
 
 export type Props = {
   projects: Array<string>;
 };
 
 const Projects: Component<Props> = (props) => {
+  const addNewProject = (event) => {
+    if (validateEvent(event)) {
+      console.log('adding project');
+    }
+  };
+
+  tinykeys(window, {
+    l: addNewProject,
+  });
+
   return (
     <div class="w-1/5 h-screen p-4 flex overflow-y-scroll">
       <div class="my-auto">
