@@ -6,7 +6,13 @@ import Tasks from './Tasks';
 const App: Component = () => {
   const [projects, setProjects] = createSignal([]);
 
-  document.addEventListener('keypress', (event) => console.log(event.key));
+  document.addEventListener('keydown', (event) => {
+    const target = event.target as HTMLElement;
+
+    if (event.key === 'l' && target.tagName.toLowerCase() !== 'input') {
+      setProjects([...projects(), 'new item']);
+    }
+  });
 
   let i = 0;
   while (i < 20) {
