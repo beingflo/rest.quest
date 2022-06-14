@@ -24,7 +24,7 @@ const Project = (props: Props) => {
             autofocus
             value={name()}
             onBlur={onEdit}
-            onInput={(event) => setName((event?.target as any).value)}
+            onInput={(event) => setName(event?.currentTarget.value)}
           />
         </form>
       </Show>

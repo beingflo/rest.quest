@@ -1,11 +1,11 @@
-import { For } from 'solid-js';
+import { Component, For } from 'solid-js';
 import Project from './Project';
 
 export type Props = {
   projects: Array<string>;
 };
 
-const Projects = (props: Props) => {
+const Projects: Component<Props> = (props) => {
   return (
     <div class="w-1/5 h-screen p-4 flex overflow-y-scroll">
       <div class="my-auto">
