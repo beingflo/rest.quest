@@ -12,7 +12,7 @@ const Project = (props: Props) => {
   const [name, setName] = createSignal(props.project.name);
 
   const setSelection = () => {
-    setSelectedProject(props.project.name);
+    setSelectedProject(props.project.id);
   };
 
   const onEditEnd = () => {

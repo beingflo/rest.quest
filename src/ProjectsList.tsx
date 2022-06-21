@@ -22,7 +22,7 @@ const Projects: Component = () => {
   return (
     <div class="w-1/5 h-screen p-4 flex overflow-y-scroll">
       <div class="my-auto">
-        <For each={state.projects}>
+        <For each={state.projects ?? []}>
           {(project: ProjectType) => <Project project={project} />}
         </For>
         <Show when={newProjectMode()}>

@@ -1,8 +1,8 @@
 import { createContext, createEffect, useContext } from 'solid-js';
-import { createStore } from 'solid-js/store';
+import { createStore, produce } from 'solid-js/store';
 import { getNewId } from './utils';
 
-const name = 'quests';
+const name = 'store';
 
 const StoreContext = createContext({});
 
@@ -19,7 +19,7 @@ export function StoreProvider(props) {
     state,
     {
       setSelectedProject(projectId: string) {
-        setState({ selectedProject: projectId });
+        setState({ ...state, selectedProject: projectId });
       },
       addProject(project: string) {
         const id = getNewId();
@@ -48,6 +48,22 @@ export function StoreProvider(props) {
         setState({
           projects: [...remainingProjects],
         });
+      },
+      addQuest(name: string) {
+        setState(
+          produce((state: any) => {
+            const selectedProject = state.projects.find(
+              (project) => project.id === state.selectedProject
+            );
+
+            selectedProject.quests.push({
+              id: getNewId(),
+              name,
+              created_at: Date.now(),
+              modified_at: Date.now(),
+            });
+          })
+        );
       },
     },
   ];

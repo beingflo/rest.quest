@@ -1,18 +1,16 @@
 import { createSignal, Show } from 'solid-js';
+import { Quest as QuestType } from './types';
 
 export type Props = {
-  questName: string;
-  setName: (name: string) => void;
-  checkQuest: () => void;
+  quest: QuestType;
 };
 
 const Quest = (props: Props) => {
   const [isEdit, setIsEdit] = createSignal(false);
-  const [name, setName] = createSignal(props.questName);
+  const [name, setName] = createSignal(props.quest.name);
 
   const onEdit = () => {
     setIsEdit(false);
-    props.setName(name());
   };
 
   return (
@@ -21,7 +19,7 @@ const Quest = (props: Props) => {
         when={isEdit()}
         fallback={
           <div
-            onClick={() => props.checkQuest()}
+            onClick={() => undefined}
             class="max-w-lg truncate cursor-pointer"
           >
             {name()}
