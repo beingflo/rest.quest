@@ -38,7 +38,7 @@ export function StoreProvider(props) {
           'projects',
           (project) => project.id === projectId,
           'name',
-          (name) => newName
+          (_) => newName
         );
       },
       deleteProject(projectId: string) {
