@@ -25,7 +25,10 @@ export function StoreProvider(props) {
         const id = getNewId();
 
         setState({
-          projects: [...(state.projects ?? []), { id, name: project }],
+          projects: [
+            ...(state.projects ?? []),
+            { id, name: project, quests: [] },
+          ],
         });
 
         return id;

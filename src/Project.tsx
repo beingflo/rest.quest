@@ -11,10 +11,6 @@ const Project = (props: Props) => {
   const [isEdit, setIsEdit] = createSignal(false);
   const [name, setName] = createSignal(props.project.name);
 
-  const onEdit = () => {
-    setIsEdit(false);
-  };
-
   const setSelection = () => {
     setSelectedProject(props.project.name);
   };
@@ -29,13 +25,13 @@ const Project = (props: Props) => {
           </div>
         }
       >
-        <form onSubmit={onEdit}>
+        <form onSubmit={() => setIsEdit(false)}>
           <input
             class="bg-gray-100 rounded-sm focus:outline-none"
             type="text"
             autofocus
             value={name()}
-            onBlur={onEdit}
+            onBlur={() => setIsEdit(false)}
             onInput={(event) => setName(event?.currentTarget.value)}
           />
         </form>
