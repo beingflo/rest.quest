@@ -17,11 +17,8 @@ export function StoreProvider(props) {
   const store = [
     state,
     {
-      add(project, quest) {
-        setState((s) => ({}));
-      },
-      update(project, quest) {
-        setState((s) => ({}));
+      setSelectedProject(project) {
+        setState({ selectedProject: project });
       },
     },
   ];

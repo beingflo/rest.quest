@@ -1,4 +1,5 @@
 import { createSignal, Show } from 'solid-js';
+import { useStore } from './store';
 
 export type Props = {
   projectName: string;
@@ -7,6 +8,7 @@ export type Props = {
 };
 
 const Project = (props: Props) => {
+  const [, { setSelectedProject }] = useStore();
   const [isEdit, setIsEdit] = createSignal(false);
   const [name, setName] = createSignal(props.projectName);
 
@@ -15,11 +17,19 @@ const Project = (props: Props) => {
     props.setName(name());
   };
 
+  const setSelection = () => {
+    setSelectedProject(props.projectName);
+  };
+
   return (
     <div class="group flex flex-row gap-1 items-baseline">
       <Show
         when={isEdit()}
-        fallback={<div class="cursor-pointer">{name()}</div>}
+        fallback={
+          <div onClick={setSelection} class="cursor-pointer">
+            {name()}
+          </div>
+        }
       >
         <form onSubmit={onEdit}>
           <input

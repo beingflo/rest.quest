@@ -3,7 +3,7 @@ import Quest from './Quest';
 import { useStore } from './store';
 
 const Quests = () => {
-  // const [state, { add }] = useStore();
+  const [state] = useStore();
   const [quests, setQuests] = createSignal([]);
 
   let i = 0;
