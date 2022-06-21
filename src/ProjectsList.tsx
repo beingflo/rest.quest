@@ -15,8 +15,8 @@ const Projects: Component = () => {
   });
 
   const onEditEnd = () => {
-    setNewProjectMode(false);
     addProject(newProjectName());
+    setNewProjectMode(false);
   };
 
   return (

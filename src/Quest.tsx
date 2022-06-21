@@ -32,7 +32,6 @@ const Quest = (props: Props) => {
           <input
             class="bg-gray-100 rounded-sm focus:outline-none"
             type="text"
-            autofocus
             value={name()}
             onBlur={onEdit}
             onInput={(event) => setName(event?.currentTarget.value)}

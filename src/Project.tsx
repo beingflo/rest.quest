@@ -7,12 +7,17 @@ export type Props = {
 };
 
 const Project = (props: Props) => {
-  const [, { setSelectedProject, deleteProject }] = useStore();
+  const [, { setSelectedProject, deleteProject, renameProject }] = useStore();
   const [isEdit, setIsEdit] = createSignal(false);
   const [name, setName] = createSignal(props.project.name);
 
   const setSelection = () => {
     setSelectedProject(props.project.name);
+  };
+
+  const onEditEnd = () => {
+    renameProject(props.project.id, name());
+    setIsEdit(false);
   };
 
   return (
@@ -25,13 +30,12 @@ const Project = (props: Props) => {
           </div>
         }
       >
-        <form onSubmit={() => setIsEdit(false)}>
+        <form onSubmit={onEditEnd}>
           <input
             class="bg-gray-100 rounded-sm focus:outline-none"
             type="text"
-            autofocus
             value={name()}
-            onBlur={() => setIsEdit(false)}
+            onBlur={onEditEnd}
             onInput={(event) => setName(event?.currentTarget.value)}
           />
         </form>
