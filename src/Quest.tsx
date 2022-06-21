@@ -3,6 +3,7 @@ import { createSignal, Show } from 'solid-js';
 export type Props = {
   questName: string;
   setName: (name: string) => void;
+  checkQuest: () => void;
 };
 
 const Quest = (props: Props) => {
@@ -18,7 +19,14 @@ const Quest = (props: Props) => {
     <div class="group flex flex-row gap-1 items-baseline w-fit">
       <Show
         when={isEdit()}
-        fallback={<div class="max-w-lg truncate">{name()}</div>}
+        fallback={
+          <div
+            onClick={() => props.checkQuest()}
+            class="max-w-lg truncate cursor-pointer"
+          >
+            {name()}
+          </div>
+        }
       >
         <form onSubmit={onEdit}>
           <input

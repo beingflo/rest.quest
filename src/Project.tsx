@@ -17,7 +17,10 @@ const Project = (props: Props) => {
 
   return (
     <div class="group flex flex-row gap-1 items-baseline">
-      <Show when={isEdit()} fallback={<div class="">{name()}</div>}>
+      <Show
+        when={isEdit()}
+        fallback={<div class="cursor-pointer">{name()}</div>}
+      >
         <form onSubmit={onEdit}>
           <input
             class="bg-gray-100 rounded-sm focus:outline-none"

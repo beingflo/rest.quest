@@ -12,18 +12,16 @@ const Quests = () => {
     i += 1;
   }
 
-  setQuests([
-    ...quests(),
-    'que jflkjsdff lkjs dflkjsd flkjs dfklsjd f lksdjf l flksjdf lksjd flskjdfksdj flskdfj sdfst ' +
-      i,
-  ]);
-
   return (
     <div class="w-full">
       <div class="mx-auto w-96">
         <For each={quests()}>
           {(quest) => (
-            <Quest questName={quest} setName={(name) => console.log(name)} />
+            <Quest
+              questName={quest}
+              setName={(name) => console.log(name)}
+              checkQuest={() => console.log('check ' + quest)}
+            />
           )}
         </For>
       </div>
