@@ -14,7 +14,7 @@ const Quests = () => {
 
   return (
     <div class="w-full">
-      <div class="mx-auto w-96">
+      <div class="mx-auto w-96 pt-4">
         <For each={quests()}>
           {(quest) => (
             <Quest
