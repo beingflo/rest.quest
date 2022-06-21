@@ -1,13 +1,17 @@
-import { Component, For } from 'solid-js';
+import { Component, createSignal, For } from 'solid-js';
 import Project from './Project';
 import tinykeys from 'tinykeys';
 import { validateEvent } from './utils';
 
-export type Props = {
-  projects: Array<string>;
-};
+const Projects: Component = () => {
+  const [projects, setProjects] = createSignal([]);
 
-const Projects: Component<Props> = (props) => {
+  let i = 0;
+  while (i < 20) {
+    setProjects([...projects(), 'test' + i]);
+    i += 1;
+  }
+
   tinykeys(window, {
     l: validateEvent(() => 'adding project'),
   });
@@ -15,11 +19,12 @@ const Projects: Component<Props> = (props) => {
   return (
     <div class="w-1/5 h-screen p-4 flex overflow-y-scroll">
       <div class="my-auto">
-        <For each={props.projects}>
+        <For each={projects()}>
           {(project) => (
             <Project
               projectName={project}
               setName={(name) => console.log(name)}
+              deleteProject={() => undefined}
             />
           )}
         </For>
