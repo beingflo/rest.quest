@@ -34,14 +34,12 @@ export function StoreProvider(props) {
         return id;
       },
       renameProject(projectId: string, newName: string) {
-        const otherProjects =
-          state.projects?.filter((project) => project.id !== projectId) ?? [];
-        const renameProject =
-          state.projects?.filter((project) => project.id === projectId) ?? [];
-
-        setState({
-          projects: [...otherProjects, { ...renameProject, name: newName }],
-        });
+        setState(
+          'projects',
+          (project) => project.id === projectId,
+          'name',
+          (name) => newName
+        );
       },
       deleteProject(projectId: string) {
         const remainingProjects =
