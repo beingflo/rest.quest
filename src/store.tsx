@@ -1,5 +1,6 @@
 import { createContext, createEffect, useContext } from 'solid-js';
 import { createStore } from 'solid-js/store';
+import { getNewId } from './utils';
 
 const name = 'quests';
 
@@ -17,8 +18,25 @@ export function StoreProvider(props) {
   const store = [
     state,
     {
-      setSelectedProject(project) {
-        setState({ selectedProject: project });
+      setSelectedProject(projectId: string) {
+        setState({ selectedProject: projectId });
+      },
+      addProject(project: string) {
+        const id = getNewId();
+
+        setState({
+          projects: [...(state.projects ?? []), { id, name: project }],
+        });
+
+        return id;
+      },
+      deleteProject(projectId: string) {
+        const remainingProjects =
+          state.projects?.filter((project) => project.id !== projectId) ?? [];
+
+        setState({
+          projects: [...remainingProjects],
+        });
       },
     },
   ];

@@ -1,24 +1,22 @@
 import { createSignal, Show } from 'solid-js';
 import { useStore } from './store';
+import { Project as ProjectType } from './types';
 
 export type Props = {
-  projectName: string;
-  setName: (name: string) => void;
-  deleteProject: () => void;
+  project: ProjectType;
 };
 
 const Project = (props: Props) => {
-  const [, { setSelectedProject }] = useStore();
+  const [, { setSelectedProject, deleteProject }] = useStore();
   const [isEdit, setIsEdit] = createSignal(false);
-  const [name, setName] = createSignal(props.projectName);
+  const [name, setName] = createSignal(props.project.name);
 
   const onEdit = () => {
     setIsEdit(false);
-    props.setName(name());
   };
 
   const setSelection = () => {
-    setSelectedProject(props.projectName);
+    setSelectedProject(props.project.name);
   };
 
   return (
@@ -50,7 +48,7 @@ const Project = (props: Props) => {
           Edit
         </div>
         <div
-          onClick={() => props.deleteProject()}
+          onClick={() => deleteProject(props.project.id)}
           class="hidden group-hover:block text-xs text-gray-600 hover:cursor-pointer"
         >
           Del

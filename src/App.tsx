@@ -1,14 +1,14 @@
 import { Component } from 'solid-js';
-import Projects from './Projects';
+import ProjectsList from './ProjectsList';
 import { StoreProvider } from './store';
-import Quests from './Quests';
+import QuestsView from './QuestsView';
 
 const App: Component = () => {
   return (
     <StoreProvider>
       <div class="flex flex-row">
-        <Projects />
-        <Quests />
+        <ProjectsList />
+        <QuestsView />
       </div>
     </StoreProvider>
   );
