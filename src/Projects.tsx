@@ -8,7 +8,7 @@ const Projects: Component = () => {
 
   let i = 0;
   while (i < 20) {
-    setProjects([...projects(), 'test' + i]);
+    setProjects([...projects(), 'project ' + i]);
     i += 1;
   }
 

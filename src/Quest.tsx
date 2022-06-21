@@ -1,14 +1,13 @@
 import { createSignal, Show } from 'solid-js';
 
 export type Props = {
-  projectName: string;
+  questName: string;
   setName: (name: string) => void;
-  deleteProject: () => void;
 };
 
-const Project = (props: Props) => {
+const Quest = (props: Props) => {
   const [isEdit, setIsEdit] = createSignal(false);
-  const [name, setName] = createSignal(props.projectName);
+  const [name, setName] = createSignal(props.questName);
 
   const onEdit = () => {
     setIsEdit(false);
@@ -16,8 +15,11 @@ const Project = (props: Props) => {
   };
 
   return (
-    <div class="group flex flex-row gap-1 items-baseline">
-      <Show when={isEdit()} fallback={<div class="">{name()}</div>}>
+    <div class="group flex flex-row gap-1 items-baseline w-fit">
+      <Show
+        when={isEdit()}
+        fallback={<div class="max-w-lg truncate">{name()}</div>}
+      >
         <form onSubmit={onEdit}>
           <input
             class="bg-gray-100 rounded-sm focus:outline-none"
@@ -36,15 +38,9 @@ const Project = (props: Props) => {
         >
           Edit
         </div>
-        <div
-          onClick={() => props.deleteProject()}
-          class="hidden group-hover:block text-xs text-gray-600 hover:cursor-pointer"
-        >
-          Del
-        </div>
       </Show>
     </div>
   );
 };
 
-export default Project;
+export default Quest;
