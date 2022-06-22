@@ -1,5 +1,6 @@
 import { createContext, createEffect, useContext } from 'solid-js';
 import { createStore, produce } from 'solid-js/store';
+import { Quest } from './types';
 import { getNewId } from './utils';
 
 const name = 'store';
@@ -61,6 +62,23 @@ export function StoreProvider(props) {
               name,
               created_at: Date.now(),
             });
+          })
+        );
+      },
+      renameQuest(questId: string, newName: string) {
+        setState(
+          produce((state: any) => {
+            const allQuests = state.projects.flatMap(
+              (project) => project.quests
+            );
+
+            const quest = allQuests?.find(
+              (quest: Quest) => quest.id === questId
+            );
+
+            if (quest) {
+              quest.name = newName;
+            }
           })
         );
       },

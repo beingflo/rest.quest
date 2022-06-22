@@ -1,4 +1,5 @@
 import { createSignal, Show } from 'solid-js';
+import { useStore } from './store';
 import { Quest as QuestType } from './types';
 
 export type Props = {
@@ -6,10 +7,12 @@ export type Props = {
 };
 
 const Quest = (props: Props) => {
+  const [, { renameQuest }] = useStore();
   const [isEdit, setIsEdit] = createSignal(false);
   const [name, setName] = createSignal(props.quest.name);
 
   const onEdit = () => {
+    renameQuest(props.quest.id, name());
     setIsEdit(false);
   };
 
@@ -22,7 +25,7 @@ const Quest = (props: Props) => {
             onClick={() => undefined}
             class="max-w-lg truncate cursor-pointer"
           >
-            {name()}
+            {name() || 'unnamed'}
           </div>
         }
       >

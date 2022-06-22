@@ -26,7 +26,7 @@ const Project = (props: Props) => {
         when={isEdit()}
         fallback={
           <div onClick={setSelection} class="cursor-pointer">
-            {name()}
+            {name() || 'unnamed'}
           </div>
         }
       >
