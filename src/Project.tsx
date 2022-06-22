@@ -7,7 +7,8 @@ export type Props = {
 };
 
 const Project = (props: Props) => {
-  const [, { setSelectedProject, deleteProject, renameProject }] = useStore();
+  const [state, { setSelectedProject, deleteProject, renameProject }] =
+    useStore();
   const [isEdit, setIsEdit] = createSignal(false);
   const [name, setName] = createSignal(props.project.name);
 
@@ -25,7 +26,12 @@ const Project = (props: Props) => {
       <Show
         when={isEdit()}
         fallback={
-          <div onClick={setSelection} class="cursor-pointer">
+          <div
+            onClick={setSelection}
+            class={`cursor-pointer ${
+              state.selectedProject === props.project.id && 'underline'
+            }`}
+          >
             {name() || 'unnamed'}
           </div>
         }
