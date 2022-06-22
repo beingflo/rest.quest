@@ -60,7 +60,6 @@ export function StoreProvider(props) {
               id: getNewId(),
               name,
               created_at: Date.now(),
-              modified_at: Date.now(),
             });
           })
         );
