@@ -10,8 +10,15 @@ const Projects: Component = () => {
   const [newProjectMode, setNewProjectMode] = createSignal(false);
   const [newProjectName, setNewProjectName] = createSignal('');
 
+  let inputRef;
+
+  const onEdit = () => {
+    setNewProjectMode(true);
+    inputRef.focus();
+  };
+
   tinykeys(window, {
-    l: validateEvent(() => setNewProjectMode(true)),
+    l: validateEvent(onEdit),
   });
 
   const onEditEnd = () => {
@@ -29,8 +36,8 @@ const Projects: Component = () => {
           <form onSubmit={onEditEnd}>
             <input
               class="bg-gray-100 rounded-sm focus:outline-none"
+              ref={inputRef}
               type="text"
-              autofocus
               onBlur={onEditEnd}
               onInput={(event) => setNewProjectName(event?.currentTarget.value)}
             />

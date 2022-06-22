@@ -12,8 +12,15 @@ const Project = (props: Props) => {
   const [isEdit, setIsEdit] = createSignal(false);
   const [name, setName] = createSignal(props.project.name);
 
+  let inputRef;
+
   const setSelection = () => {
     setSelectedProject(props.project.id);
+  };
+
+  const onEdit = () => {
+    setIsEdit(true);
+    inputRef.focus();
   };
 
   const onEditEnd = () => {
@@ -39,6 +46,7 @@ const Project = (props: Props) => {
         <form onSubmit={onEditEnd}>
           <input
             class="bg-gray-100 rounded-sm focus:outline-none"
+            ref={inputRef}
             type="text"
             value={name()}
             onBlur={onEditEnd}
@@ -48,7 +56,7 @@ const Project = (props: Props) => {
       </Show>
       <Show when={!isEdit()}>
         <div
-          onClick={() => setIsEdit(true)}
+          onClick={onEdit}
           class="hidden group-hover:block text-xs text-gray-600 hover:cursor-pointer"
         >
           Edit

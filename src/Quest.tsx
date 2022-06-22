@@ -11,7 +11,14 @@ const Quest = (props: Props) => {
   const [isEdit, setIsEdit] = createSignal(false);
   const [name, setName] = createSignal(props.quest.name);
 
+  let inputRef;
+
   const onEdit = () => {
+    setIsEdit(true);
+    inputRef.focus();
+  };
+
+  const onEditEnd = () => {
     renameQuest(props.quest.id, name());
     setIsEdit(false);
   };
@@ -30,19 +37,20 @@ const Quest = (props: Props) => {
           </div>
         }
       >
-        <form onSubmit={onEdit}>
+        <form onSubmit={onEditEnd}>
           <input
             class="bg-gray-100 rounded-sm focus:outline-none"
             type="text"
+            ref={inputRef}
             value={name()}
-            onBlur={onEdit}
+            onBlur={onEditEnd}
             onInput={(event) => setName(event?.currentTarget.value)}
           />
         </form>
       </Show>
       <Show when={!isEdit()}>
         <div
-          onClick={() => setIsEdit(true)}
+          onClick={onEdit}
           class="hidden group-hover:block text-xs text-gray-600 hover:cursor-pointer"
         >
           Edit

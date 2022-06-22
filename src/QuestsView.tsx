@@ -10,8 +10,15 @@ const Quests = () => {
   const [newQuestMode, setNewQuestMode] = createSignal(false);
   const [newQuestName, setNewQuestName] = createSignal('');
 
+  let inputRef;
+
+  const onEdit = () => {
+    setNewQuestMode(true);
+    inputRef.focus();
+  };
+
   tinykeys(window, {
-    n: validateEvent(() => setNewQuestMode(true)),
+    n: validateEvent(onEdit),
   });
 
   const onEditEnd = () => {
@@ -35,7 +42,7 @@ const Quests = () => {
             <input
               class="bg-gray-100 rounded-sm focus:outline-none"
               type="text"
-              autofocus
+              ref={inputRef}
               onBlur={onEditEnd}
               onInput={(event) => setNewQuestName(event?.currentTarget.value)}
             />
