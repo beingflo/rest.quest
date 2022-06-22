@@ -82,6 +82,23 @@ export function StoreProvider(props) {
           })
         );
       },
+      completeQuest(questId: string) {
+        setState(
+          produce((state: any) => {
+            const allQuests = state.projects.flatMap(
+              (project) => project.quests
+            );
+
+            const quest = allQuests?.find(
+              (quest: Quest) => quest.id === questId
+            );
+
+            if (quest) {
+              quest.complete = true;
+            }
+          })
+        );
+      },
     },
   ];
 

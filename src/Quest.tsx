@@ -7,7 +7,7 @@ export type Props = {
 };
 
 const Quest = (props: Props) => {
-  const [, { renameQuest }] = useStore();
+  const [, { renameQuest, completeQuest }] = useStore();
   const [isEdit, setIsEdit] = createSignal(false);
   const [name, setName] = createSignal(props.quest.name);
 
@@ -16,15 +16,16 @@ const Quest = (props: Props) => {
     setIsEdit(false);
   };
 
+  const onComplete = () => {
+    completeQuest(props.quest.id);
+  };
+
   return (
     <div class="group flex flex-row gap-1 items-baseline w-fit">
       <Show
         when={isEdit()}
         fallback={
-          <div
-            onClick={() => undefined}
-            class="max-w-lg truncate cursor-pointer"
-          >
+          <div onClick={onComplete} class="max-w-lg truncate cursor-pointer">
             {name() || 'unnamed'}
           </div>
         }

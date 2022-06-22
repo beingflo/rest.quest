@@ -19,16 +19,15 @@ const Quests = () => {
     setNewQuestMode(false);
   };
 
+  const quests = () =>
+    state.projects
+      ?.find((project) => project.id === state.selectedProject)
+      ?.quests?.filter((quest) => !quest.complete) ?? [];
+
   return (
     <div class="w-full">
       <div class="mx-auto w-96 pt-4">
-        <For
-          each={
-            state.projects?.find(
-              (project) => project.id === state.selectedProject
-            )?.quests ?? []
-          }
-        >
+        <For each={quests()}>
           {(quest) => <Quest quest={quest as QuestType} />}
         </For>
         <Show when={newQuestMode()}>
