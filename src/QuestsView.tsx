@@ -69,7 +69,7 @@ const Quests = () => {
       }
     >
       <div class="w-full pt-4">
-        <div class="grid grid-cols-3 gap-y-4">
+        <div class="grid grid-cols-3 gap-y-4 gap-x-1">
           <For each={quests()}>
             {(quest) => <Quest quest={quest as QuestType} />}
           </For>

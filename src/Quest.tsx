@@ -28,13 +28,13 @@ const Quest = (props: Props) => {
   };
 
   return (
-    <div class="group flex flex-row gap-1 items-baseline w-fit">
+    <div class="group flex flex-row gap-1 items-baseline">
       <Show
         when={isEdit()}
         fallback={
           <div
             onClick={onComplete}
-            class={`max-w-lg truncate cursor-pointer ${
+            class={`truncate cursor-pointer ${
               props.quest.complete && 'invisible'
             }`}
           >
@@ -42,9 +42,9 @@ const Quest = (props: Props) => {
           </div>
         }
       >
-        <form onSubmit={onEditEnd}>
+        <form onSubmit={onEditEnd} class="w-full">
           <input
-            class="bg-gray-100 rounded-sm focus:outline-none"
+            class="w-full rounded-sm focus:outline-none"
             type="text"
             ref={inputRef}
             value={name()}
