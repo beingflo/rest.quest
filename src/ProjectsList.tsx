@@ -32,7 +32,7 @@ const Projects: Component = () => {
   };
 
   const projects = () =>
-    state.projects.filter((project) => !project.deleted) ?? [];
+    state.projects?.filter((project) => !project.deleted) ?? [];
 
   return (
     <div class="w-1/5 h-screen p-4 flex overflow-y-scroll">

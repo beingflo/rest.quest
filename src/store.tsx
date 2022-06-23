@@ -77,6 +77,10 @@ export function StoreProvider(props) {
         );
       },
       addQuest(name: string) {
+        if (!state.projects) {
+          return;
+        }
+
         setState(
           produce((state: any) => {
             const selectedProject = state.projects.find(
