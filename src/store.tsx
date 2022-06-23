@@ -22,6 +22,26 @@ export function StoreProvider(props) {
       setSelectedProject(projectId: string) {
         setState({ ...state, selectedProject: projectId });
       },
+      changeSelectedProject(direction: 'UP' | 'DOWN') {
+        setState(
+          produce((state: any) => {
+            const selectedProjectIndex = state.projects.findIndex(
+              (project) => project.id === state.selectedProject
+            );
+
+            const newIndexDirection = direction === 'UP' ? -1 : 1;
+            let newIndex = selectedProjectIndex + newIndexDirection;
+            if (newIndex < 0) {
+              newIndex = state.projects.length - 1;
+            }
+            if (newIndex >= state.projects.length) {
+              newIndex = 0;
+            }
+
+            state.selectedProject = state.projects[newIndex].id;
+          })
+        );
+      },
       addProject(project: string) {
         const id = getNewId();
 

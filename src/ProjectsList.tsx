@@ -6,7 +6,8 @@ import { useStore } from './store';
 import { Project as ProjectType } from './types';
 
 const Projects: Component = () => {
-  const [state, { addProject, setSelectedProject }] = useStore();
+  const [state, { addProject, setSelectedProject, changeSelectedProject }] =
+    useStore();
   const [newProjectMode, setNewProjectMode] = createSignal(false);
   const [newProjectName, setNewProjectName] = createSignal('');
 
@@ -20,6 +21,8 @@ const Projects: Component = () => {
   tinykeys(window, {
     l: validateEvent(onEdit),
     Escape: () => setNewProjectMode(false),
+    ArrowUp: () => changeSelectedProject('UP'),
+    ArrowDown: () => changeSelectedProject('DOWN'),
   });
 
   const onEditEnd = () => {
