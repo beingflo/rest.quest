@@ -31,10 +31,13 @@ const Projects: Component = () => {
     setSelectedProject(projectId);
   };
 
+  const projects = () =>
+    state.projects.filter((project) => !project.deleted) ?? [];
+
   return (
     <div class="w-1/5 h-screen p-4 flex overflow-y-scroll">
       <div class="my-auto">
-        <For each={state.projects ?? []}>
+        <For each={projects()}>
           {(project: ProjectType) => <Project project={project} />}
         </For>
         <Show when={newProjectMode()}>

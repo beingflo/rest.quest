@@ -30,13 +30,16 @@ export function StoreProvider(props) {
             );
 
             const newIndexDirection = direction === 'UP' ? -1 : 1;
-            let newIndex = selectedProjectIndex + newIndexDirection;
-            if (newIndex < 0) {
-              newIndex = state.projects.length - 1;
-            }
-            if (newIndex >= state.projects.length) {
-              newIndex = 0;
-            }
+            let newIndex = selectedProjectIndex;
+            do {
+              newIndex = newIndex + newIndexDirection;
+              if (newIndex < 0) {
+                newIndex = state.projects.length - 1;
+              }
+              if (newIndex >= state.projects.length) {
+                newIndex = 0;
+              }
+            } while (state.projects[newIndex].deleted);
 
             state.selectedProject = state.projects[newIndex].id;
           })
@@ -63,12 +66,12 @@ export function StoreProvider(props) {
         );
       },
       deleteProject(projectId: string) {
-        const remainingProjects =
-          state.projects?.filter((project) => project.id !== projectId) ?? [];
-
-        setState({
-          projects: [...remainingProjects],
-        });
+        setState(
+          'projects',
+          (project) => project.id === projectId,
+          'deleted',
+          (_) => true
+        );
       },
       addQuest(name: string) {
         setState(
