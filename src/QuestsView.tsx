@@ -6,7 +6,7 @@ import { useStore } from './store';
 import { Quest as QuestType } from './types';
 
 const Quests = () => {
-  const [state, { addQuest }] = useStore();
+  const [state, { addQuest, toggleView }] = useStore();
   const [newQuestMode, setNewQuestMode] = createSignal(false);
   const [newQuestName, setNewQuestName] = createSignal('');
 
@@ -20,6 +20,7 @@ const Quests = () => {
   tinykeys(window, {
     n: validateEvent(onEdit),
     Escape: () => setNewQuestMode(false),
+    v: validateEvent(toggleView),
   });
 
   const onEditEnd = () => {
@@ -27,30 +28,57 @@ const Quests = () => {
     setNewQuestMode(false);
   };
 
-  const quests = () =>
-    state.projects
-      ?.find((project) => project.id === state.selectedProject)
-      ?.quests?.filter((quest) => !quest.complete) ?? [];
+  const NewQuestInput = () => (
+    <form onSubmit={onEditEnd}>
+      <input
+        class="rounded-sm focus:outline-none"
+        type="text"
+        ref={inputRef}
+        onBlur={onEditEnd}
+        onInput={(event) => setNewQuestName(event?.currentTarget.value)}
+      />
+    </form>
+  );
+
+  const quests = () => {
+    const currentProject = state.projects?.find(
+      (project) => project.id === state.selectedProject
+    );
+
+    if (state.view) {
+      return currentProject?.quests ?? [];
+    } else {
+      return currentProject?.quests?.filter((quest) => !quest.complete) ?? [];
+    }
+  };
 
   return (
-    <div class="w-full">
-      <div class="mx-auto w-96 pt-4">
-        <For each={quests()}>
-          {(quest) => <Quest quest={quest as QuestType} />}
-        </For>
-        <Show when={newQuestMode()}>
-          <form onSubmit={onEditEnd}>
-            <input
-              class="bg-gray-100 rounded-sm focus:outline-none"
-              type="text"
-              ref={inputRef}
-              onBlur={onEditEnd}
-              onInput={(event) => setNewQuestName(event?.currentTarget.value)}
-            />
-          </form>
-        </Show>
+    <Show
+      when={state.view}
+      fallback={
+        <div class="w-full">
+          <div class="mx-auto w-96 pt-4">
+            <For each={quests()}>
+              {(quest) => <Quest quest={quest as QuestType} />}
+            </For>
+            <Show when={newQuestMode()}>
+              <NewQuestInput />
+            </Show>
+          </div>
+        </div>
+      }
+    >
+      <div class="w-full pt-4">
+        <div class="grid grid-cols-3 gap-y-4">
+          <For each={quests()}>
+            {(quest) => <Quest quest={quest as QuestType} />}
+          </For>
+          <Show when={newQuestMode()}>
+            <NewQuestInput />
+          </Show>
+        </div>
       </div>
-    </div>
+    </Show>
   );
 };
 

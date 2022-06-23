@@ -32,8 +32,13 @@ const Quest = (props: Props) => {
       <Show
         when={isEdit()}
         fallback={
-          <div onClick={onComplete} class="max-w-lg truncate cursor-pointer">
-            {name() || 'unnamed'}
+          <div
+            onClick={onComplete}
+            class={`max-w-lg truncate cursor-pointer ${
+              props.quest.complete && 'invisible'
+            }`}
+          >
+            {props.quest.name || 'unnamed'}
           </div>
         }
       >
@@ -51,7 +56,9 @@ const Quest = (props: Props) => {
       <Show when={!isEdit()}>
         <div
           onClick={onEdit}
-          class="hidden group-hover:block text-xs text-gray-600 hover:cursor-pointer"
+          class={`hidden group-hover:block text-xs text-gray-600 hover:cursor-pointer ${
+            props.quest.complete && 'invisible'
+          }`}
         >
           Edit
         </div>

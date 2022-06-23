@@ -43,7 +43,7 @@ const Projects: Component = () => {
         <Show when={newProjectMode()}>
           <form onSubmit={onEditEnd}>
             <input
-              class="bg-gray-100 rounded-sm focus:outline-none"
+              class="rounded-sm focus:outline-none"
               ref={inputRef}
               type="text"
               onBlur={onEditEnd}

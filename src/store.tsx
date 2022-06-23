@@ -19,6 +19,9 @@ export function StoreProvider(props) {
   const store = [
     state,
     {
+      toggleView() {
+        setState({ view: !state.view });
+      },
       setSelectedProject(projectId: string) {
         setState({ ...state, selectedProject: projectId });
       },
