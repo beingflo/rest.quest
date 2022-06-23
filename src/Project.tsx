@@ -35,7 +35,7 @@ const Project = (props: Props) => {
         fallback={
           <div
             onClick={setSelection}
-            class={`cursor-pointer ${
+            class={`truncate cursor-pointer ${
               state.selectedProject === props.project.id && 'underline'
             }`}
           >

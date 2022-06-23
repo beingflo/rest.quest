@@ -36,7 +36,7 @@ const Projects: Component = () => {
 
   return (
     <div class="w-1/5 h-screen p-4 flex overflow-y-scroll">
-      <div class="my-auto">
+      <div class="my-auto w-full">
         <For each={projects()}>
           {(project: ProjectType) => <Project project={project} />}
         </For>
