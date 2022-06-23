@@ -19,6 +19,7 @@ const Projects: Component = () => {
 
   tinykeys(window, {
     l: validateEvent(onEdit),
+    Escape: () => setNewProjectMode(false),
   });
 
   const onEditEnd = () => {

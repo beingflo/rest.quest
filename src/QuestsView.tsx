@@ -19,6 +19,7 @@ const Quests = () => {
 
   tinykeys(window, {
     n: validateEvent(onEdit),
+    Escape: () => setNewQuestMode(false),
   });
 
   const onEditEnd = () => {
