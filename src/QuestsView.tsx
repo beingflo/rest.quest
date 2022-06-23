@@ -29,9 +29,9 @@ const Quests = () => {
   };
 
   const NewQuestInput = () => (
-    <form onSubmit={onEditEnd}>
+    <form onSubmit={onEditEnd} class="w-full">
       <input
-        class="rounded-sm focus:outline-none"
+        class="w-full rounded-sm focus:outline-none"
         type="text"
         ref={inputRef}
         onBlur={onEditEnd}
@@ -57,7 +57,7 @@ const Quests = () => {
       when={state.view}
       fallback={
         <div class="w-full">
-          <div class="mx-auto w-96 pt-4">
+          <div class="mx-auto w-96 py-4">
             <For each={quests()}>
               {(quest) => <Quest quest={quest as QuestType} />}
             </For>
@@ -69,7 +69,7 @@ const Quests = () => {
       }
     >
       <div class="w-full pt-4">
-        <div class="grid grid-cols-3 gap-1">
+        <div class="grid grid-cols-4 gap-1">
           <For each={quests()}>
             {(quest) => <Quest quest={quest as QuestType} />}
           </For>

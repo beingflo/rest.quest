@@ -45,7 +45,7 @@ const Project = (props: Props) => {
       >
         <form onSubmit={onEditEnd}>
           <input
-            class="bg-gray-100 rounded-sm focus:outline-none"
+            class="rounded-sm focus:outline-none"
             ref={inputRef}
             type="text"
             value={name()}
