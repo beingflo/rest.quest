@@ -1,16 +1,28 @@
-import { Component } from 'solid-js';
+import { Component, createEffect, createSignal, Show } from 'solid-js';
 import ProjectsList from './ProjectsList';
-import { StoreProvider } from './store';
+import { useStore } from './store';
 import QuestsView from './QuestsView';
+import tinykeys from 'tinykeys';
+import { validateEvent } from './utils';
+import Help from './Help';
 
 const App: Component = () => {
+  const [state] = useStore();
+  const [showApp, setShowApp] = createSignal(!!state.projects);
+
+  createEffect(() => console.log(showApp()));
+
+  tinykeys(window, {
+    h: validateEvent(() => setShowApp(!showApp())),
+  });
+
   return (
-    <StoreProvider>
+    <Show when={showApp()} fallback={<Help />}>
       <div class="flex flex-row">
         <ProjectsList />
         <QuestsView />
       </div>
-    </StoreProvider>
+    </Show>
   );
 };
 
