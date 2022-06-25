@@ -19,7 +19,7 @@ const Projects: Component = () => {
   };
 
   tinykeys(window, {
-    l: validateEvent(onEdit),
+    p: validateEvent(onEdit),
     Escape: () => setNewProjectMode(false),
     ArrowUp: () => changeSelectedProject('UP'),
     ArrowDown: () => changeSelectedProject('DOWN'),
