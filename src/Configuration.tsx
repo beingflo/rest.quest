@@ -1,13 +1,16 @@
 import { Component, createSignal } from 'solid-js';
+import { useStore } from './store';
 
 const Configuration: Component = () => {
-  const [endpoint, setEndpoint] = createSignal('');
-  const [apiKey, setApiKey] = createSignal('');
-  const [secret, setSecret] = createSignal('');
+  const [state, { setS3Config }] = useStore();
+
+  const [endpoint, setEndpoint] = createSignal(state?.s3?.endpoint);
+  const [apiKey, setApiKey] = createSignal(state?.s3?.apiKey);
+  const [secret, setSecret] = createSignal(state?.s3?.secret);
 
   const onSubmit = (event) => {
     event.preventDefault();
-    console.log(endpoint() + ' ' + apiKey() + ' ' + secret());
+    setS3Config({ endpoint: endpoint(), apiKey: apiKey(), secret: secret() });
   };
 
   return (
@@ -19,6 +22,7 @@ const Configuration: Component = () => {
             type="text"
             class="focus:outline-none mt-0 block w-full border-0 border-b-2 border-gray-200 px-0.5 placeholder-gray-400 focus:border-gray-400 focus:ring-0"
             placeholder="Enter an S3 endpoint"
+            value={endpoint()}
             onChange={(event) => setEndpoint(event?.currentTarget?.value)}
           />
         </label>
@@ -28,6 +32,7 @@ const Configuration: Component = () => {
             type="password"
             class="focus:outline-none mt-0 block w-full border-0 border-b-2 border-gray-200 px-0.5 placeholder-gray-400 focus:border-gray-400 focus:ring-0"
             placeholder="Enter the API key"
+            value={apiKey()}
             onChange={(event) => setApiKey(event?.currentTarget?.value)}
           />
         </label>
@@ -39,6 +44,7 @@ const Configuration: Component = () => {
             type="password"
             class="focus:outline-none mt-0 block w-full border-0 border-b-2 border-gray-200 px-0.5 placeholder-gray-400 focus:border-gray-400 focus:ring-0"
             placeholder="Enter a secret phrase"
+            value={secret()}
             onChange={(event) => setSecret(event?.currentTarget?.value)}
           />
         </label>

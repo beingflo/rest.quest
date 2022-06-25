@@ -23,7 +23,10 @@ export function StoreProvider(props) {
         setState({ view: !state.view });
       },
       setSelectedProject(projectId: string) {
-        setState({ ...state, selectedProject: projectId });
+        setState({ selectedProject: projectId });
+      },
+      setS3Config(config: Object) {
+        setState({ s3: config });
       },
       changeSelectedProject(direction: 'UP' | 'DOWN') {
         setState(
