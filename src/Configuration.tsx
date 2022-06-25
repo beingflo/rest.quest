@@ -3,10 +3,11 @@ import { Component, createSignal } from 'solid-js';
 const Configuration: Component = () => {
   const [endpoint, setEndpoint] = createSignal('');
   const [apiKey, setApiKey] = createSignal('');
+  const [secret, setSecret] = createSignal('');
 
   const onSubmit = (event) => {
     event.preventDefault();
-    console.log(endpoint() + ' ' + apiKey());
+    console.log(endpoint() + ' ' + apiKey() + ' ' + secret());
   };
 
   return (
@@ -28,6 +29,17 @@ const Configuration: Component = () => {
             class="focus:outline-none mt-0 block w-full border-0 border-b-2 border-gray-200 px-0.5 placeholder-gray-400 focus:border-gray-400 focus:ring-0"
             placeholder="Enter the API key"
             onChange={(event) => setApiKey(event?.currentTarget?.value)}
+          />
+        </label>
+        <label class="block">
+          <span class="text-sm text-gray-700">
+            Encryption secret (optional)
+          </span>
+          <input
+            type="password"
+            class="focus:outline-none mt-0 block w-full border-0 border-b-2 border-gray-200 px-0.5 placeholder-gray-400 focus:border-gray-400 focus:ring-0"
+            placeholder="Enter a secret phrase"
+            onChange={(event) => setSecret(event?.currentTarget?.value)}
           />
         </label>
         <button
