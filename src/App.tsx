@@ -10,8 +10,6 @@ const App: Component = () => {
   const [state] = useStore();
   const [showApp, setShowApp] = createSignal(!!state.projects);
 
-  createEffect(() => console.log(showApp()));
-
   tinykeys(window, {
     h: validateEvent(() => setShowApp(!showApp())),
   });
