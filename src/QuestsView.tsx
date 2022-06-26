@@ -42,7 +42,7 @@ const Quests = () => {
 
   const quests = () => {
     const currentProject = state.projects?.find(
-      (project) => project.id === state.selectedProject
+      (project) => project.id === state.selectedProject && !project.deleted
     );
 
     if (!state.view) {
