@@ -14,7 +14,7 @@ const App: Component = () => {
 
   tinykeys(window, {
     h: validateEvent(() => setShowApp(!showApp())),
-    s: validateEvent(() => setShowConfig(!showConfig())),
+    c: validateEvent(() => setShowConfig(!showConfig())),
   });
 
   return (
