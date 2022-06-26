@@ -8,7 +8,7 @@ import Help from './Help';
 import Configuration from './Configuration';
 
 const App: Component = () => {
-  const [state] = useStore();
+  const [state, { addProject, setSelectedProject, addQuest }] = useStore();
   const [showApp, setShowApp] = createSignal(!!state.projects);
   const [showConfig, setShowConfig] = createSignal(false);
 
@@ -16,6 +16,18 @@ const App: Component = () => {
     h: validateEvent(() => setShowApp(!showApp())),
     c: validateEvent(() => setShowConfig(!showConfig())),
   });
+
+  if (!state.projects) {
+    const projectId = addProject('Get started');
+    setSelectedProject(projectId);
+    addQuest('Open help again with h');
+    addQuest('Add a new quest');
+    addQuest('Rename the quest');
+    addQuest('Check off the quest');
+    addQuest('Add a new project');
+    addQuest('Switch between projects');
+    addQuest('Edit or delete a project');
+  }
 
   return (
     <Show when={showApp()} fallback={<Help />}>

@@ -22,11 +22,12 @@ const Help: Component = () => {
       </p>
       <Instruction left="p" right="New project" />
       <Instruction left="n" right="New quest in the current project" />
+      <Instruction left="click on quest" right="Check off quest" />
       <Instruction left="h" right="Toggle help" />
       <Instruction left="c" right="Toggle configuration" />
       <Instruction left="v" right="Toggle view of quests" />
-      <Instruction left="Arrow Up" right="Select previous project" />
-      <Instruction left="Arrow Down" right="Select next project" />
+      <Instruction left="arrow up" right="Select previous project" />
+      <Instruction left="arrow down" right="Select next project" />
       <p class="mt-20">
         You're already in the application, press <b>h</b> to close the help
         screen!
