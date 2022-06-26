@@ -45,7 +45,7 @@ const Quests = () => {
       (project) => project.id === state.selectedProject
     );
 
-    if (state.view) {
+    if (!state.view) {
       return currentProject?.quests ?? [];
     } else {
       return currentProject?.quests?.filter((quest) => !quest.complete) ?? [];
@@ -54,7 +54,7 @@ const Quests = () => {
 
   return (
     <Show
-      when={state.view}
+      when={!state.view}
       fallback={
         <div class="w-full">
           <div class="mx-auto w-96 py-4">
