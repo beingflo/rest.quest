@@ -108,26 +108,7 @@ export function StoreProvider(props) {
               id: getNewId(),
               name,
               created_at: Date.now(),
-              modified_at: Date.now(),
             });
-          })
-        );
-      },
-      renameQuest(questId: string, newName: string) {
-        setState(
-          produce((state: any) => {
-            const allQuests = state.projects.flatMap(
-              (project) => project.quests
-            );
-
-            const quest = allQuests?.find(
-              (quest: Quest) => quest.id === questId
-            );
-
-            if (quest) {
-              quest.name = newName;
-              quest.modified_at = Date.now();
-            }
           })
         );
       },
