@@ -1,4 +1,4 @@
-import { createSignal, For, Show } from 'solid-js';
+import { Component, createSignal, For, Show } from 'solid-js';
 import Quest from './Quest';
 import tinykeys from 'tinykeys';
 import { validateEvent } from './utils';
@@ -6,7 +6,7 @@ import { useStore } from './store';
 import { Quest as QuestType } from './types';
 import { s3Sync } from './S3';
 
-const Quests = () => {
+const Quests: Component = () => {
   const [state, { addQuest, toggleView }] = useStore();
   const [newQuestMode, setNewQuestMode] = createSignal(false);
   const [newQuestName, setNewQuestName] = createSignal('');

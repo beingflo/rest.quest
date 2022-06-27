@@ -1,4 +1,4 @@
-import { createSignal, Show } from 'solid-js';
+import { Component } from 'solid-js';
 import { useStore } from './store';
 import { Quest as QuestType } from './types';
 
@@ -6,7 +6,7 @@ export type Props = {
   quest: QuestType;
 };
 
-const Quest = (props: Props) => {
+const Quest: Component<Props> = (props: Props) => {
   const [, { completeQuest }] = useStore();
 
   const onComplete = () => {

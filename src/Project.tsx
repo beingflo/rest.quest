@@ -1,4 +1,4 @@
-import { createSignal, Show } from 'solid-js';
+import { Component, createSignal, Show } from 'solid-js';
 import { useStore } from './store';
 import { Project as ProjectType } from './types';
 
@@ -6,7 +6,7 @@ export type Props = {
   project: ProjectType;
 };
 
-const Project = (props: Props) => {
+const Project: Component<Props> = (props: Props) => {
   const [state, { setSelectedProject, deleteProject, renameProject }] =
     useStore();
   const [isEdit, setIsEdit] = createSignal(false);
