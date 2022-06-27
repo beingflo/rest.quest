@@ -6,11 +6,15 @@ type Index = Array<{ id: string; deleted: boolean }>;
 const IndexFile = 'index.json';
 
 export const s3Sync = async (projectId: string, state: any) => {
+  if (!state?.s3) {
+    return;
+  }
+
   const aws = new AwsClient({
-    accessKeyId: 'EXO985b1dfd4115eea9cbf62fab',
-    secretAccessKey: 'MD9wRpVlvKUgVviyXNdEHmrmEYcYLAQnByKnTsO7mw8',
+    accessKeyId: state?.s3?.apiKey,
+    secretAccessKey: state?.s3?.apiSecretKey,
     service: 's3',
-    region: 'ch-dk-2',
+    region: state?.s3?.region,
   });
 
   await syncIndex(aws, state);
@@ -19,7 +23,7 @@ export const s3Sync = async (projectId: string, state: any) => {
 
 const syncProject = async (aws: any, state: any, projectId: string) => {
   const projectResponse = await aws.fetch(
-    `https://sos-ch-dk-2.exo.io/rest.quest/${projectId}`,
+    `${state?.s3?.endpoint}${projectId}`,
     {
       method: 'GET',
     }
@@ -28,24 +32,21 @@ const syncProject = async (aws: any, state: any, projectId: string) => {
     projectResponse.status === 200 ? await projectResponse.json() : {};
   const newProject = mergeProject(project, state, projectId);
 
-  await aws.fetch(`https://sos-ch-dk-2.exo.io/rest.quest/${projectId}`, {
+  await aws.fetch(`${state?.s3?.endpoint}${projectId}`, {
     method: 'PUT',
     body: JSON.stringify(newProject),
   });
 };
 
 const syncIndex = async (aws: any, state: any) => {
-  const indexResponse = await aws.fetch(
-    `https://sos-ch-dk-2.exo.io/rest.quest/${IndexFile}`,
-    {
-      method: 'GET',
-    }
-  );
+  const indexResponse = await aws.fetch(`${state?.s3?.endpoint}${IndexFile}`, {
+    method: 'GET',
+  });
   const index: Index =
     indexResponse.status === 200 ? await indexResponse.json() : [];
   const newIndex = mergeProjects(index, state);
 
-  await aws.fetch(`https://sos-ch-dk-2.exo.io/rest.quest/${IndexFile}`, {
+  await aws.fetch(`${state?.s3?.endpoint}${IndexFile}`, {
     method: 'PUT',
     body: JSON.stringify(newIndex),
   });

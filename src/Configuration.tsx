@@ -5,12 +5,20 @@ const Configuration: Component = () => {
   const [state, { setS3Config }] = useStore();
 
   const [endpoint, setEndpoint] = createSignal(state?.s3?.endpoint);
+  const [region, setRegion] = createSignal(state?.s3?.region);
   const [apiKey, setApiKey] = createSignal(state?.s3?.apiKey);
+  const [apiSecretKey, setApiSecretKey] = createSignal(state?.s3?.apiSecretKey);
   const [secret, setSecret] = createSignal(state?.s3?.secret);
 
   const onSubmit = (event) => {
     event.preventDefault();
-    setS3Config({ endpoint: endpoint(), apiKey: apiKey(), secret: secret() });
+    setS3Config({
+      endpoint: endpoint(),
+      region: region(),
+      apiKey: apiKey(),
+      apiSecretKey: apiSecretKey(),
+      secret: secret(),
+    });
   };
 
   return (
@@ -27,13 +35,33 @@ const Configuration: Component = () => {
           />
         </label>
         <label class="block">
-          <span class="text-sm text-gray-700">API Key</span>
+          <span class="text-sm text-gray-700">S3 Region</span>
+          <input
+            type="text"
+            class="focus:outline-none mt-0 block w-full border-0 border-b-2 border-gray-200 px-0.5 placeholder-gray-400 focus:border-gray-400 focus:ring-0"
+            placeholder="Enter an S3 endpoint"
+            value={region()}
+            onChange={(event) => setRegion(event?.currentTarget?.value)}
+          />
+        </label>
+        <label class="block">
+          <span class="text-sm text-gray-700">API Access Key</span>
           <input
             type="password"
             class="focus:outline-none mt-0 block w-full border-0 border-b-2 border-gray-200 px-0.5 placeholder-gray-400 focus:border-gray-400 focus:ring-0"
-            placeholder="Enter the API key"
+            placeholder="Enter the API access key"
             value={apiKey()}
             onChange={(event) => setApiKey(event?.currentTarget?.value)}
+          />
+        </label>
+        <label class="block">
+          <span class="text-sm text-gray-700">API Secret Key</span>
+          <input
+            type="password"
+            class="focus:outline-none mt-0 block w-full border-0 border-b-2 border-gray-200 px-0.5 placeholder-gray-400 focus:border-gray-400 focus:ring-0"
+            placeholder="Enter the API secret key"
+            value={apiSecretKey()}
+            onChange={(event) => setApiSecretKey(event?.currentTarget?.value)}
           />
         </label>
         <label class="block">
