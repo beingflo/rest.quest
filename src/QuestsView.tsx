@@ -4,6 +4,7 @@ import tinykeys from 'tinykeys';
 import { validateEvent } from './utils';
 import { useStore } from './store';
 import { Quest as QuestType } from './types';
+import { s3Sync } from './S3';
 
 const Quests = () => {
   const [state, { addQuest, toggleView }] = useStore();
@@ -26,6 +27,8 @@ const Quests = () => {
   const onEditEnd = () => {
     addQuest(newQuestName());
     setNewQuestMode(false);
+
+    s3Sync(state?.selectedProject, state);
   };
 
   const NewQuestInput = () => (
