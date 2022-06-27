@@ -1,4 +1,5 @@
 import { AwsClient } from 'aws4fetch';
+import { unwrap } from 'solid-js/store';
 import { Project } from './types';
 
 type Index = Array<{ id: string; deleted: boolean }>;
@@ -17,11 +18,28 @@ export const s3Sync = async (projectId: string, state: any) => {
     region: state?.s3?.region,
   });
 
-  await syncIndex(aws, state);
-  await syncProject(aws, state, projectId);
+  await syncIndex(aws, state, () => undefined);
+  await syncProject(aws, projectId, state);
 };
 
-const syncProject = async (aws: any, state: any, projectId: string) => {
+const syncIndex = async (aws: any, state: any, deleteProject: any) => {
+  const indexResponse = await aws.fetch(`${state?.s3?.endpoint}${IndexFile}`, {
+    method: 'GET',
+  });
+  const remoteIndex: Index =
+    indexResponse.status === 200 ? await indexResponse.json() : [];
+  const { index, toCreate, toDelete } = mergeIndex(remoteIndex, state);
+
+  await aws.fetch(`${state?.s3?.endpoint}${IndexFile}`, {
+    method: 'PUT',
+    body: JSON.stringify(index),
+  });
+
+  toDelete.map((idx) => deleteProject(idx));
+  toCreate.map((idx) => syncProject(aws, idx, state));
+};
+
+const syncProject = async (aws: any, projectId: string, state: any) => {
   const projectResponse = await aws.fetch(
     `${state?.s3?.endpoint}${projectId}`,
     {
@@ -38,58 +56,81 @@ const syncProject = async (aws: any, state: any, projectId: string) => {
   });
 };
 
-const syncIndex = async (aws: any, state: any) => {
-  const indexResponse = await aws.fetch(`${state?.s3?.endpoint}${IndexFile}`, {
-    method: 'GET',
-  });
-  const index: Index =
-    indexResponse.status === 200 ? await indexResponse.json() : [];
-  const newIndex = mergeProjects(index, state);
-
-  await aws.fetch(`${state?.s3?.endpoint}${IndexFile}`, {
-    method: 'PUT',
-    body: JSON.stringify(newIndex),
-  });
-};
-
 const mergeProject = (
   project: Project,
   state: any,
   projectId: string
 ): Project => {
-  return state.projects?.find((proj) => proj.id === projectId);
+  const localProject = state.projects?.find((proj) => proj.id === projectId);
+
+  const newProject: Project = { ...localProject };
+  if (project.modified_at > localProject.modified_at) {
+    newProject.name = project.name;
+    newProject.modified_at = project.modified_at;
+  }
+
+  const questMap = new Map();
+  localProject?.quests?.map((quest) => questMap.set(quest.id, quest));
+
+  const toComplete = [];
+  const toRename = [];
+  const toAdd = [];
+  project?.quests?.map((quest) => {
+    if (questMap.has(quest.id)) {
+      if (quest.complete && !questMap.get(quest.id).complete) {
+        toComplete.push(quest.id);
+        questMap.get(quest.id).complete = true;
+      }
+      if (questMap.get(quest.id).modified_at < quest.modified_at) {
+        toRename.push(quest);
+        questMap.get(quest.id).name = quest.name;
+      }
+    } else {
+      toAdd.push(quest);
+      questMap.set(quest.id, quest);
+    }
+  });
+
+  console.log(unwrap([...questMap.values()]));
+
+  return { ...newProject };
 };
 
-const mergeProjects = (index: Index, state: any): Index => {
+const mergeIndex = (
+  index: Index,
+  state: any
+): { index: Index; toCreate: Array<string>; toDelete: Array<string> } => {
   const localIndex = state?.projects?.map((project) => ({
     id: project.id,
     deleted: project.deleted ?? false,
   }));
 
-  const commonIndexMap = new Map();
-
-  index?.forEach((idx) => {
-    if (commonIndexMap.has(idx.id)) {
-      if (idx.deleted) {
-        commonIndexMap.set(idx.id, true);
-      }
-    } else {
-      commonIndexMap.set(idx.id, idx.deleted);
-    }
-  });
+  const indexMap = new Map();
 
   localIndex?.forEach((idx) => {
-    if (commonIndexMap.has(idx.id)) {
-      if (idx.deleted) {
-        commonIndexMap.set(idx.id, true);
+    indexMap.set(idx.id, idx.deleted);
+  });
+
+  const toDelete = [];
+  const toCreate = [];
+  index?.forEach((idx) => {
+    if (indexMap.has(idx.id)) {
+      if (idx.deleted && indexMap.get(idx.id)) {
+        toDelete.push(idx.id);
+        indexMap.set(idx.id, true);
       }
     } else {
-      commonIndexMap.set(idx.id, idx.deleted);
+      toCreate.push(idx.id);
+      indexMap.set(idx.id, idx.deleted);
     }
   });
 
-  return [...commonIndexMap].map(([key, value]) => ({
-    id: key,
-    deleted: value,
-  }));
+  return {
+    index: [...indexMap].map(([key, value]) => ({
+      id: key,
+      deleted: value,
+    })),
+    toCreate,
+    toDelete,
+  };
 };
