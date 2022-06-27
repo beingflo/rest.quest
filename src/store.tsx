@@ -57,7 +57,13 @@ export function StoreProvider(props) {
         setState({
           projects: [
             ...(state.projects ?? []),
-            { id, name: project, modified_at: Date.now(), quests: [] },
+            {
+              id,
+              name: project,
+              modified_at: Date.now(),
+              created_at: Date.now(),
+              quests: [],
+            },
           ],
         });
 
@@ -77,10 +83,14 @@ export function StoreProvider(props) {
       },
       deleteProject(projectId: string) {
         setState(
-          'projects',
-          (project) => project.id === projectId,
-          'deleted',
-          (_) => true
+          produce((state: any) => {
+            const selectedProject = state.projects.find(
+              (project) => project.id === projectId
+            );
+
+            selectedProject.deleted = true;
+            selectedProject.quests = [];
+          })
         );
       },
       addQuest(name: string) {
@@ -97,6 +107,7 @@ export function StoreProvider(props) {
             selectedProject.quests.push({
               id: getNewId(),
               name,
+              created_at: Date.now(),
               modified_at: Date.now(),
             });
           })
