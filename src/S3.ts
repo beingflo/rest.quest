@@ -63,37 +63,32 @@ const mergeProject = (
 ): Project => {
   const localProject = state.projects?.find((proj) => proj.id === projectId);
 
-  const newProject: Project = { ...localProject };
+  const newProject: Project = unwrap({ ...localProject });
   if (project.modified_at > localProject.modified_at) {
     newProject.name = project.name;
     newProject.modified_at = project.modified_at;
   }
 
   const questMap = new Map();
-  localProject?.quests?.map((quest) => questMap.set(quest.id, quest));
+  localProject?.quests?.map((quest) => questMap.set(quest.id, unwrap(quest)));
 
-  const toComplete = [];
-  const toRename = [];
-  const toAdd = [];
   project?.quests?.map((quest) => {
     if (questMap.has(quest.id)) {
-      if (quest.complete && !questMap.get(quest.id).complete) {
-        toComplete.push(quest.id);
+      if (quest.complete) {
         questMap.get(quest.id).complete = true;
       }
       if (questMap.get(quest.id).modified_at < quest.modified_at) {
-        toRename.push(quest);
         questMap.get(quest.id).name = quest.name;
       }
     } else {
-      toAdd.push(quest);
       questMap.set(quest.id, quest);
     }
   });
 
-  console.log(unwrap([...questMap.values()]));
+  const quests = [...questMap.values()];
+  quests?.sort((a, b) => a.modified_at - b.modified_at);
 
-  return { ...newProject };
+  return { ...newProject, quests };
 };
 
 const mergeIndex = (
