@@ -28,7 +28,7 @@ const Quests: Component = () => {
     addQuest(newQuestName());
     setNewQuestMode(false);
 
-    s3Sync(state?.selectedProject, state);
+    // s3Sync(state?.selectedProject, state);
   };
 
   const NewQuestInput = () => (
@@ -44,9 +44,11 @@ const Quests: Component = () => {
   );
 
   const quests = () => {
-    const currentProject = state.projects?.find(
-      (project) => project.id === state.selectedProject && !project.deleted
-    );
+    const currentProject = state.projectMap[state.selectedProject];
+
+    if (!currentProject) {
+      return [];
+    }
 
     if (!state.view) {
       return currentProject?.quests ?? [];

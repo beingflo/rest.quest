@@ -9,7 +9,7 @@ import Configuration from './Configuration';
 
 const App: Component = () => {
   const [state, { addProject, setSelectedProject, addQuest }] = useStore();
-  const [showApp, setShowApp] = createSignal(!!state.projects);
+  const [showApp, setShowApp] = createSignal(!!state.projectList);
   const [showConfig, setShowConfig] = createSignal(false);
 
   tinykeys(window, {
@@ -17,12 +17,11 @@ const App: Component = () => {
     c: validateEvent(() => setShowConfig(!showConfig())),
   });
 
-  if (!state.projects) {
+  if (!state.projectList) {
     const projectId = addProject('Get started');
     setSelectedProject(projectId);
     addQuest('Open help again with h');
     addQuest('Add a new quest');
-    addQuest('Rename the quest');
     addQuest('Check off the quest');
     addQuest('Add a new project');
     addQuest('Switch between projects');

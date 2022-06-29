@@ -1,9 +1,10 @@
-import { Component, createSignal, For, Show } from 'solid-js';
+import { Component, createEffect, createSignal, For, Show } from 'solid-js';
 import Project from './Project';
 import tinykeys from 'tinykeys';
 import { validateEvent } from './utils';
 import { useStore } from './store';
 import { Project as ProjectType } from './types';
+import { unwrap } from 'solid-js/store';
 
 const Projects: Component = () => {
   const [state, { addProject, setSelectedProject, changeSelectedProject }] =
@@ -32,13 +33,17 @@ const Projects: Component = () => {
   };
 
   const projects = () =>
-    state.projects?.filter((project) => !project.deleted) ?? [];
+    state.projectList?.filter((project) => !project.deleted) ?? [];
 
   return (
     <div class="w-1/5 h-screen p-4 flex overflow-y-scroll">
       <div class="my-auto w-full">
         <For each={projects()}>
-          {(project: ProjectType) => <Project project={project} />}
+          {(project: any) => (
+            <Project
+              project={{ ...state.projectMap[project.id], id: project.id }}
+            />
+          )}
         </For>
         <Show when={newProjectMode()}>
           <form onSubmit={onEditEnd}>
