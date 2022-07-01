@@ -2,11 +2,15 @@ import { AwsClient } from 'aws4fetch';
 import { unwrap } from 'solid-js/store';
 import { Project } from './types';
 
-type Index = Array<{ id: string; deleted: boolean }>;
+type Index = Array<{ id: string; deleted: boolean; created_at: string }>;
 
 const IndexFile = 'index.json';
 
-export const s3Sync = async (projectId: string, state: any) => {
+export const s3Sync = async (
+  projectId: string,
+  state: any,
+  deleteProject: any
+) => {
   if (!state?.s3) {
     return;
   }
@@ -18,8 +22,8 @@ export const s3Sync = async (projectId: string, state: any) => {
     region: state?.s3?.region,
   });
 
-  await syncIndex(aws, state, () => undefined);
-  await syncProject(aws, projectId, state);
+  await syncIndex(aws, state, deleteProject);
+  //await syncProject(aws, projectId, state);
 };
 
 const syncIndex = async (aws: any, state: any, deleteProject: any) => {
@@ -35,8 +39,11 @@ const syncIndex = async (aws: any, state: any, deleteProject: any) => {
     body: JSON.stringify(index),
   });
 
+  console.log('to delete: ', toDelete);
+  console.log('to create: ', toCreate);
+
   toDelete.map((idx) => deleteProject(idx));
-  toCreate.map((idx) => syncProject(aws, idx, state));
+  //toCreate.map((idx) => syncProject(aws, idx, state));
 };
 
 const syncProject = async (aws: any, projectId: string, state: any) => {
@@ -95,35 +102,36 @@ const mergeIndex = (
   index: Index,
   state: any
 ): { index: Index; toCreate: Array<string>; toDelete: Array<string> } => {
-  const localIndex = state?.projects?.map((project) => ({
-    id: project.id,
-    deleted: project.deleted ?? false,
-  }));
+  const localIndex = [...state?.projectList];
 
   const indexMap = new Map();
 
   localIndex?.forEach((idx) => {
-    indexMap.set(idx.id, idx.deleted);
+    indexMap.set(idx.id, { deleted: idx.deleted, created_at: idx.created_at });
   });
 
   const toDelete = [];
   const toCreate = [];
   index?.forEach((idx) => {
     if (indexMap.has(idx.id)) {
-      if (idx.deleted && indexMap.get(idx.id)) {
+      if (idx.deleted && !indexMap.get(idx.id).deleted) {
         toDelete.push(idx.id);
         indexMap.set(idx.id, true);
       }
     } else {
       toCreate.push(idx.id);
-      indexMap.set(idx.id, idx.deleted);
+      indexMap.set(idx.id, {
+        deleted: idx.deleted,
+        created_at: idx.created_at,
+      });
     }
   });
 
   return {
     index: [...indexMap].map(([key, value]) => ({
       id: key,
-      deleted: value,
+      deleted: value.deleted,
+      created_at: value.created_at,
     })),
     toCreate,
     toDelete,
