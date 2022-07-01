@@ -3,11 +3,9 @@ import Project from './Project';
 import tinykeys from 'tinykeys';
 import { validateEvent } from './utils';
 import { useStore } from './store';
-import { Project as ProjectType } from './types';
-import { unwrap } from 'solid-js/store';
 
 const Projects: Component = () => {
-  const [state, { addProject, setSelectedProject, changeSelectedProject }] =
+  const [state, { newProject, setSelectedProject, changeSelectedProject }] =
     useStore();
   const [newProjectMode, setNewProjectMode] = createSignal(false);
   const [newProjectName, setNewProjectName] = createSignal('');
@@ -27,7 +25,7 @@ const Projects: Component = () => {
   });
 
   const onEditEnd = () => {
-    const projectId = addProject(newProjectName());
+    const projectId = newProject(newProjectName());
     setNewProjectMode(false);
     setSelectedProject(projectId);
   };

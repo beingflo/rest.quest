@@ -51,7 +51,7 @@ export function StoreProvider(props) {
           })
         );
       },
-      addProject(project: string) {
+      newProject(project: string) {
         const id = getNewId();
 
         setState({

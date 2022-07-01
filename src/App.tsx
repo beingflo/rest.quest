@@ -8,7 +8,7 @@ import Help from './Help';
 import Configuration from './Configuration';
 
 const App: Component = () => {
-  const [state, { addProject, setSelectedProject, addQuest }] = useStore();
+  const [state, { newProject, setSelectedProject, addQuest }] = useStore();
   const [showApp, setShowApp] = createSignal(!!state.projectList);
   const [showConfig, setShowConfig] = createSignal(false);
 
@@ -18,7 +18,7 @@ const App: Component = () => {
   });
 
   if (!state.projectList) {
-    const projectId = addProject('Get started');
+    const projectId = newProject('Get started');
     setSelectedProject(projectId);
     addQuest('Open help again with h');
     addQuest('Add a new quest');
