@@ -9,7 +9,8 @@ const IndexFile = 'index.json';
 export const s3Sync = async (
   projectId: string,
   state: any,
-  deleteProject: any
+  deleteProject: any,
+  addProject: any
 ) => {
   if (!state?.s3) {
     return;
@@ -22,11 +23,16 @@ export const s3Sync = async (
     region: state?.s3?.region,
   });
 
-  await syncIndex(aws, state, deleteProject);
-  //await syncProject(aws, projectId, state);
+  await syncIndex(aws, state, deleteProject, addProject);
+  await syncProject(aws, projectId, state, addProject);
 };
 
-const syncIndex = async (aws: any, state: any, deleteProject: any) => {
+const syncIndex = async (
+  aws: any,
+  state: any,
+  deleteProject: any,
+  addProject: any
+) => {
   const indexResponse = await aws.fetch(`${state?.s3?.endpoint}${IndexFile}`, {
     method: 'GET',
   });
@@ -43,10 +49,15 @@ const syncIndex = async (aws: any, state: any, deleteProject: any) => {
   console.log('to create: ', toCreate);
 
   toDelete.map((idx) => deleteProject(idx));
-  //toCreate.map((idx) => syncProject(aws, idx, state));
+  toCreate.map((idx) => syncProject(aws, idx, state, addProject));
 };
 
-const syncProject = async (aws: any, projectId: string, state: any) => {
+const syncProject = async (
+  aws: any,
+  projectId: string,
+  state: any,
+  addProject: any
+) => {
   const projectResponse = await aws.fetch(
     `${state?.s3?.endpoint}${projectId}`,
     {
@@ -55,11 +66,15 @@ const syncProject = async (aws: any, projectId: string, state: any) => {
   );
   const project =
     projectResponse.status === 200 ? await projectResponse.json() : {};
-  const newProject = mergeProject(project, state, projectId);
+  const [mergedProject, shouldSet] = mergeProject(project, state, projectId);
+
+  if (shouldSet) {
+    addProject(mergedProject);
+  }
 
   await aws.fetch(`${state?.s3?.endpoint}${projectId}`, {
     method: 'PUT',
-    body: JSON.stringify(newProject),
+    body: JSON.stringify(mergedProject),
   });
 };
 
@@ -67,10 +82,18 @@ const mergeProject = (
   project: Project,
   state: any,
   projectId: string
-): Project => {
-  const localProject = state.projects?.find((proj) => proj.id === projectId);
+): [Project, boolean] => {
+  const localProject = state.projectMap[projectId];
+
+  // We need to just take remote since we don`t have anything
+  if (!localProject) {
+    return [project, true];
+  }
+
+  return [localProject, false];
 
   const newProject: Project = unwrap({ ...localProject });
+
   if (project.modified_at > localProject.modified_at) {
     newProject.name = project.name;
     newProject.modified_at = project.modified_at;

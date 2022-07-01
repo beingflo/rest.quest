@@ -1,6 +1,6 @@
 import { createContext, createEffect, useContext } from 'solid-js';
 import { createStore, produce } from 'solid-js/store';
-import { Quest } from './types';
+import { Project, Quest } from './types';
 import { getNewId } from './utils';
 
 const name = 'store';
@@ -62,14 +62,35 @@ export function StoreProvider(props) {
           projectMap: {
             ...state.projectMap,
             [id]: {
+              id,
               name: project,
               modified_at: Date.now(),
+              created_at: Date.now(),
               quests: [],
             },
           },
         });
 
         return id;
+      },
+      addProject(project: Project) {
+        if (!project.id) {
+          console.error('No id in project to be added');
+          return;
+        }
+
+        setState({
+          projectList: [
+            ...(state.projectList ?? []),
+            { id: project.id, created_at: project.created_at, deleted: false },
+          ],
+          projectMap: {
+            ...state.projectMap,
+            [project.id]: {
+              ...project,
+            },
+          },
+        });
       },
       renameProject(projectId: string, newName: string) {
         setState(
