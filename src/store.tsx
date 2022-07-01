@@ -116,17 +116,18 @@ export function StoreProvider(props) {
       completeQuest(questId: string) {
         setState(
           produce((state: any) => {
-            const allQuests = Object.values(state.projectMap).flatMap(
-              (project: any) => project.quests
-            );
+            Object.entries(state.projectMap).map(
+              ([projectId, project]: any) => {
+                const quest = project.quests.find(
+                  (quest: Quest) => quest.id === questId
+                );
 
-            const quest = allQuests?.find(
-              (quest: Quest) => quest.id === questId
+                if (quest) {
+                  quest.complete = true;
+                  state.projectMap[projectId].modified_at = Date.now();
+                }
+              }
             );
-
-            if (quest) {
-              quest.complete = true;
-            }
           })
         );
       },
