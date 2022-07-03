@@ -104,18 +104,6 @@ export function StoreProvider(props) {
 
         setTrigger((v) => v + 1);
       },
-      renameProject(projectId: string, newName: string) {
-        setState(
-          produce((state: any) => {
-            const selectedProject = state.projectMap[projectId];
-
-            selectedProject.name = newName;
-            selectedProject.version += 1;
-          })
-        );
-
-        setTrigger((v) => v + 1);
-      },
       deleteProject(projectId: string) {
         setState(
           produce((state: any) => {

@@ -13,6 +13,7 @@ export const s3Sync = async (
   addProject: any
 ) => {
   if (!state?.s3) {
+    console.log('No credentials for syncing');
     return;
   }
 
@@ -92,9 +93,13 @@ const mergeProject = (
     return [localProject, false];
   }
 
-  return [localProject, false];
+  // We made the last change
+  if (localProject.version - project.version >= 0) {
+    console.log('we are newest');
+    return [localProject, false];
+  }
 
-  const newProject: Project = unwrap({ ...localProject });
+  const newProject: Project = { ...project };
 
   if (project.modified_at > localProject.modified_at) {
     newProject.name = project.name;
