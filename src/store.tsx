@@ -1,4 +1,9 @@
-import { createContext, createEffect, useContext } from 'solid-js';
+import {
+  createContext,
+  createEffect,
+  createSignal,
+  useContext,
+} from 'solid-js';
 import { createStore, produce } from 'solid-js/store';
 import { Project, Quest } from './types';
 import { getNewId } from './utils';
@@ -6,6 +11,8 @@ import { getNewId } from './utils';
 const name = 'store';
 
 const StoreContext = createContext({});
+
+export const [trigger, setTrigger] = createSignal(0);
 
 export function StoreProvider(props) {
   const localState = localStorage.getItem(name);
@@ -27,6 +34,7 @@ export function StoreProvider(props) {
       },
       setS3Config(config: Object) {
         setState({ s3: config });
+        setTrigger((v) => v + 1);
       },
       changeSelectedProject(direction: 'UP' | 'DOWN') {
         setState(
@@ -71,6 +79,8 @@ export function StoreProvider(props) {
           },
         });
 
+        setTrigger((v) => v + 1);
+
         return id;
       },
       addProject(project: Project) {
@@ -91,6 +101,8 @@ export function StoreProvider(props) {
             },
           },
         });
+
+        setTrigger((v) => v + 1);
       },
       renameProject(projectId: string, newName: string) {
         setState(
@@ -101,6 +113,8 @@ export function StoreProvider(props) {
             selectedProject.modified_at = Date.now();
           })
         );
+
+        setTrigger((v) => v + 1);
       },
       deleteProject(projectId: string) {
         setState(
@@ -114,6 +128,8 @@ export function StoreProvider(props) {
             delete state.projectMap[projectId];
           })
         );
+
+        setTrigger((v) => v + 1);
       },
       addQuest(name: string) {
         if (
@@ -133,6 +149,8 @@ export function StoreProvider(props) {
             });
           })
         );
+
+        setTrigger((v) => v + 1);
       },
       completeQuest(questId: string) {
         setState(
@@ -151,6 +169,8 @@ export function StoreProvider(props) {
             );
           })
         );
+
+        setTrigger((v) => v + 1);
       },
     },
   ];
