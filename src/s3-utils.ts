@@ -45,9 +45,6 @@ const syncIndex = async (
     body: JSON.stringify(index),
   });
 
-  console.log('to delete: ', toDelete);
-  console.log('to create: ', toCreate);
-
   toDelete.map((idx) => deleteProject(idx));
   toCreate.map((idx) => syncProject(aws, idx, state, addProject));
 };
@@ -93,15 +90,6 @@ const mergeProject = (
   // We need local since there is no remote
   if (!project) {
     return [localProject, false];
-  }
-  console.log('remoteDate');
-  console.log(project.modified_at);
-
-  console.log('localDate');
-  console.log(localProject.modified_at);
-
-  if (localProject.modified_at > project.modified_at) {
-    console.log('local newer');
   }
 
   return [localProject, false];

@@ -18,7 +18,7 @@ const App: Component = () => {
 
   createEffect(() => {
     trigger();
-    s3Sync(state?.selectedProject, state, deleteProject, addProject);
+    // s3Sync(state?.selectedProject, state, deleteProject, addProject);
   });
 
   tinykeys(window, {

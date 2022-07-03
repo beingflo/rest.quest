@@ -72,7 +72,7 @@ export function StoreProvider(props) {
             [id]: {
               id,
               name: project,
-              modified_at: Date.now(),
+              version: 0,
               created_at: Date.now(),
               quests: [],
             },
@@ -110,7 +110,7 @@ export function StoreProvider(props) {
             const selectedProject = state.projectMap[projectId];
 
             selectedProject.name = newName;
-            selectedProject.modified_at = Date.now();
+            selectedProject.version += 1;
           })
         );
 
@@ -141,7 +141,7 @@ export function StoreProvider(props) {
 
         setState(
           produce((state: any) => {
-            state.projectMap[state.selectedProject].modified_at = Date.now();
+            state.projectMap[state.selectedProject].version += 1;
             state.projectMap[state.selectedProject].quests.push({
               id: getNewId(),
               name,
@@ -163,7 +163,7 @@ export function StoreProvider(props) {
 
                 if (quest) {
                   quest.complete = true;
-                  state.projectMap[projectId].modified_at = Date.now();
+                  state.projectMap[projectId].version += 1;
                 }
               }
             );
