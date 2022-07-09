@@ -14,7 +14,7 @@ const Quests: Component = () => {
 
   const onEdit = () => {
     setNewQuestMode(true);
-    inputRef.focus();
+    inputRef?.focus();
   };
 
   tinykeys(window, {
@@ -23,7 +23,9 @@ const Quests: Component = () => {
     v: validateEvent(toggleView),
   });
 
-  const onEditEnd = () => {
+  const onEditEnd = (event) => {
+    event?.preventDefault();
+
     addQuest(newQuestName());
     setNewQuestMode(false);
   };
@@ -34,7 +36,6 @@ const Quests: Component = () => {
         class="w-full rounded-sm focus:outline-none"
         type="text"
         ref={inputRef}
-        onBlur={onEditEnd}
         onInput={(event) => setNewQuestName(event?.currentTarget.value)}
       />
     </form>

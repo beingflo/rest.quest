@@ -1,6 +1,6 @@
-import { Component, createEffect, createSignal, Show } from 'solid-js';
+import { Component, createSignal, onCleanup, Show } from 'solid-js';
 import ProjectsList from './ProjectsList';
-import { trigger, useStore } from './store';
+import { useStore } from './store';
 import QuestsView from './QuestsView';
 import tinykeys from 'tinykeys';
 import { validateEvent } from './utils';
@@ -9,17 +9,17 @@ import Configuration from './Configuration';
 import { s3Sync } from './s3-utils';
 
 const App: Component = () => {
-  const [
-    state,
-    { newProject, setSelectedProject, addQuest, deleteProject, addProject },
-  ] = useStore();
+  const [state, { newProject, setSelectedProject, addQuest }] = useStore();
   const [showApp, setShowApp] = createSignal(!!state.projectList);
   const [showConfig, setShowConfig] = createSignal(false);
 
-  createEffect(() => {
-    trigger();
-    // s3Sync(state?.selectedProject, state, deleteProject, addProject);
-  });
+  const syncState = () => {
+    s3Sync(state);
+  };
+
+  document.addEventListener('visibilitychange', syncState);
+
+  onCleanup(() => document.removeEventListener('visibilitychange', syncState));
 
   tinykeys(window, {
     h: validateEvent(() => setShowApp(!showApp())),
@@ -34,7 +34,7 @@ const App: Component = () => {
     addQuest('Check off the quest');
     addQuest('Add a new project');
     addQuest('Switch between projects');
-    addQuest('Edit or delete a project');
+    addQuest('Delete a project');
   }
 
   return (

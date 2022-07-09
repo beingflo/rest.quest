@@ -1,19 +1,14 @@
 import { AwsClient } from 'aws4fetch';
-import { unwrap } from 'solid-js/store';
-import { Project } from './types';
+import { setState } from './store';
 
-type Index = Array<{ id: string; deleted: boolean; created_at: string }>;
+type Index = { version: number };
 
 const IndexFile = 'index.json';
+const StateFile = 'state.json';
 
-export const s3Sync = async (
-  projectId: string,
-  state: any,
-  deleteProject: any,
-  addProject: any
-) => {
+export const s3Sync = async (state: any) => {
   if (!state?.s3) {
-    console.log('No credentials for syncing');
+    console.info('No credentials for syncing');
     return;
   }
 
@@ -24,146 +19,45 @@ export const s3Sync = async (
     region: state?.s3?.region,
   });
 
-  await syncIndex(aws, state, deleteProject, addProject);
-  await syncProject(aws, projectId, state, addProject);
-};
-
-const syncIndex = async (
-  aws: any,
-  state: any,
-  deleteProject: any,
-  addProject: any
-) => {
   const indexResponse = await aws.fetch(`${state?.s3?.endpoint}${IndexFile}`, {
     method: 'GET',
   });
   const remoteIndex: Index =
     indexResponse.status === 200 ? await indexResponse.json() : [];
-  const { index, toCreate, toDelete } = mergeIndex(remoteIndex, state);
 
-  await aws.fetch(`${state?.s3?.endpoint}${IndexFile}`, {
-    method: 'PUT',
-    body: JSON.stringify(index),
-  });
+  if (state.version >= remoteIndex.version || !remoteIndex.version) {
+    // We have newer state
+    console.info('Sync local state');
 
-  toDelete.map((idx) => deleteProject(idx));
-  toCreate.map((idx) => syncProject(aws, idx, state, addProject));
-};
+    await aws.fetch(`${state?.s3?.endpoint}${IndexFile}`, {
+      method: 'PUT',
+      body: JSON.stringify({ version: state.version }),
+    });
 
-const syncProject = async (
-  aws: any,
-  projectId: string,
-  state: any,
-  addProject: any
-) => {
-  const projectResponse = await aws.fetch(
-    `${state?.s3?.endpoint}${projectId}`,
-    {
-      method: 'GET',
-    }
-  );
-  const project =
-    projectResponse.status === 200 ? await projectResponse.json() : {};
-  const [mergedProject, shouldSet] = mergeProject(project, state, projectId);
+    await aws.fetch(`${state?.s3?.endpoint}${StateFile}`, {
+      method: 'PUT',
+      body: JSON.stringify({
+        projectList: state.projectList,
+        projectMap: state.projectMap,
+      }),
+    });
+  } else {
+    // Remote has newer state
+    console.info('Sync remote state');
 
-  if (shouldSet) {
-    addProject(mergedProject);
-  }
-
-  await aws.fetch(`${state?.s3?.endpoint}${projectId}`, {
-    method: 'PUT',
-    body: JSON.stringify(mergedProject),
-  });
-};
-
-const mergeProject = (
-  project: Project,
-  state: any,
-  projectId: string
-): [Project, boolean] => {
-  const localProject = state.projectMap[projectId];
-
-  // We need to just take remote since we don`t have anything
-  if (!localProject) {
-    return [project, true];
-  }
-
-  // We need local since there is no remote
-  if (!project) {
-    return [localProject, false];
-  }
-
-  // We made the last change
-  if (localProject.version - project.version >= 0) {
-    console.log('we are newest');
-    return [localProject, false];
-  }
-
-  const newProject: Project = { ...project };
-
-  if (project.modified_at > localProject.modified_at) {
-    newProject.name = project.name;
-    newProject.modified_at = project.modified_at;
-  }
-
-  const questMap = new Map();
-  localProject?.quests?.map((quest) => questMap.set(quest.id, unwrap(quest)));
-
-  project?.quests?.map((quest) => {
-    if (questMap.has(quest.id)) {
-      if (quest.complete) {
-        questMap.get(quest.id).complete = true;
+    const projectResponse = await aws.fetch(
+      `${state?.s3?.endpoint}${StateFile}`,
+      {
+        method: 'GET',
       }
-      if (questMap.get(quest.id).modified_at < quest.modified_at) {
-        questMap.get(quest.id).name = quest.name;
-      }
-    } else {
-      questMap.set(quest.id, quest);
-    }
-  });
+    );
+    const project =
+      projectResponse.status === 200 ? await projectResponse.json() : {};
 
-  const quests = [...questMap.values()];
-  quests?.sort((a, b) => a.modified_at - b.modified_at);
-
-  return { ...newProject, quests };
-};
-
-const mergeIndex = (
-  index: Index,
-  state: any
-): { index: Index; toCreate: Array<string>; toDelete: Array<string> } => {
-  const localIndex = [...state?.projectList];
-
-  const indexMap = new Map();
-
-  localIndex?.forEach((idx) => {
-    indexMap.set(idx.id, { deleted: idx.deleted, created_at: idx.created_at });
-  });
-
-  const toDelete = [];
-  const toCreate = [];
-  index?.forEach((idx) => {
-    if (indexMap.has(idx.id)) {
-      if (idx.deleted && !indexMap.get(idx.id).deleted) {
-        toDelete.push(idx.id);
-        indexMap.set(idx.id, true);
-      }
-    } else {
-      toCreate.push(idx.id);
-      indexMap.set(idx.id, {
-        deleted: idx.deleted,
-        created_at: idx.created_at,
-      });
-    }
-  });
-
-  return {
-    index: [...indexMap].map(([key, value]) => ({
-      id: key,
-      deleted: value.deleted,
-      created_at: value.created_at,
-    })),
-    toCreate,
-    toDelete,
-  };
+    setState({
+      ...project,
+      version: remoteIndex.version,
+      selectedProject: state.selectedProject,
+    });
+  }
 };

@@ -1,4 +1,4 @@
-import { Component, createEffect, createSignal, For, Show } from 'solid-js';
+import { Component, createSignal, For, Show } from 'solid-js';
 import Project from './Project';
 import tinykeys from 'tinykeys';
 import { validateEvent } from './utils';
@@ -24,7 +24,9 @@ const Projects: Component = () => {
     ArrowDown: () => changeSelectedProject('DOWN'),
   });
 
-  const onEditEnd = () => {
+  const onEditEnd = (event) => {
+    event?.preventDefault();
+
     const projectId = newProject(newProjectName());
     setNewProjectMode(false);
     setSelectedProject(projectId);
@@ -49,7 +51,6 @@ const Projects: Component = () => {
               class="rounded-sm focus:outline-none"
               ref={inputRef}
               type="text"
-              onBlur={onEditEnd}
               onInput={(event) => setNewProjectName(event?.currentTarget.value)}
             />
           </form>

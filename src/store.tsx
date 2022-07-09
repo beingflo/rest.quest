@@ -1,26 +1,19 @@
-import {
-  createContext,
-  createEffect,
-  createSignal,
-  useContext,
-} from 'solid-js';
+import { createContext, createEffect, useContext } from 'solid-js';
 import { createStore, produce } from 'solid-js/store';
-import { Project, Quest } from './types';
+import { Quest } from './types';
 import { getNewId } from './utils';
 
 const name = 'store';
 
 const StoreContext = createContext({});
 
-export const [trigger, setTrigger] = createSignal(0);
+const localState = localStorage.getItem(name);
+
+export const [state, setState] = createStore(
+  localState ? JSON.parse(localState) : { version: 0 }
+);
 
 export function StoreProvider(props) {
-  const localState = localStorage.getItem(name);
-
-  const [state, setState] = createStore(
-    localState ? JSON.parse(localState) : {}
-  );
-
   createEffect(() => localStorage.setItem(name, JSON.stringify(state)));
 
   const store = [
@@ -34,7 +27,6 @@ export function StoreProvider(props) {
       },
       setS3Config(config: Object) {
         setState({ s3: config });
-        setTrigger((v) => v + 1);
       },
       changeSelectedProject(direction: 'UP' | 'DOWN') {
         setState(
@@ -77,32 +69,10 @@ export function StoreProvider(props) {
               quests: [],
             },
           },
+          version: state.version + 1,
         });
-
-        setTrigger((v) => v + 1);
 
         return id;
-      },
-      addProject(project: Project) {
-        if (!project.id) {
-          console.error('No id in project to be added');
-          return;
-        }
-
-        setState({
-          projectList: [
-            ...(state.projectList ?? []),
-            { id: project.id, created_at: project.created_at, deleted: false },
-          ],
-          projectMap: {
-            ...state.projectMap,
-            [project.id]: {
-              ...project,
-            },
-          },
-        });
-
-        setTrigger((v) => v + 1);
       },
       deleteProject(projectId: string) {
         setState(
@@ -114,10 +84,10 @@ export function StoreProvider(props) {
             selectedProject.deleted = true;
 
             delete state.projectMap[projectId];
+
+            state.version = state.version + 1;
           })
         );
-
-        setTrigger((v) => v + 1);
       },
       addQuest(name: string) {
         if (
@@ -135,10 +105,9 @@ export function StoreProvider(props) {
               name,
               created_at: Date.now(),
             });
+            state.version = state.version + 1;
           })
         );
-
-        setTrigger((v) => v + 1);
       },
       completeQuest(questId: string) {
         setState(
@@ -155,10 +124,10 @@ export function StoreProvider(props) {
                 }
               }
             );
+
+            state.version = state.version + 1;
           })
         );
-
-        setTrigger((v) => v + 1);
       },
     },
   ];
