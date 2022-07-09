@@ -1,4 +1,4 @@
-import { Component, createSignal, For, Show } from 'solid-js';
+import { Component, createSignal, For, onCleanup, Show } from 'solid-js';
 import Quest from './Quest';
 import tinykeys from 'tinykeys';
 import { validateEvent } from './utils';
@@ -17,11 +17,13 @@ const Quests: Component = () => {
     inputRef?.focus();
   };
 
-  tinykeys(window, {
+  const cleanup = tinykeys(window, {
     n: validateEvent(onEdit),
     Escape: () => setNewQuestMode(false),
     v: validateEvent(toggleView),
   });
+
+  onCleanup(cleanup);
 
   const onEditEnd = (event) => {
     event?.preventDefault();

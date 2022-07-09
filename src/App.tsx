@@ -21,10 +21,12 @@ const App: Component = () => {
 
   onCleanup(() => document.removeEventListener('visibilitychange', syncState));
 
-  tinykeys(window, {
+  const cleanup = tinykeys(window, {
     h: validateEvent(() => setShowApp(!showApp())),
     c: validateEvent(() => setShowConfig(!showConfig())),
   });
+
+  onCleanup(cleanup);
 
   if (!state.projectList) {
     const projectId = newProject('Get started');

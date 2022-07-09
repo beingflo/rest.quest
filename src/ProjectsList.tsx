@@ -1,4 +1,4 @@
-import { Component, createSignal, For, Show } from 'solid-js';
+import { Component, createSignal, For, onCleanup, Show } from 'solid-js';
 import Project from './Project';
 import tinykeys from 'tinykeys';
 import { validateEvent } from './utils';
@@ -14,15 +14,17 @@ const Projects: Component = () => {
 
   const onEdit = () => {
     setNewProjectMode(true);
-    inputRef.focus();
+    inputRef?.focus();
   };
 
-  tinykeys(window, {
+  const cleanup = tinykeys(window, {
     p: validateEvent(onEdit),
     Escape: () => setNewProjectMode(false),
     ArrowUp: () => changeSelectedProject('UP'),
     ArrowDown: () => changeSelectedProject('DOWN'),
   });
+
+  onCleanup(cleanup);
 
   const onEditEnd = (event) => {
     event?.preventDefault();
