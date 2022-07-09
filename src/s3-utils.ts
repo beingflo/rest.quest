@@ -25,7 +25,12 @@ export const s3Sync = async (state: any) => {
   const remoteIndex: Index =
     indexResponse.status === 200 ? await indexResponse.json() : [];
 
-  if (state.version >= remoteIndex.version || !remoteIndex.version) {
+  if (state.version === remoteIndex.version) {
+    // No need to sync
+    console.info('No sync');
+
+    return;
+  } else if (state.version > remoteIndex.version || !remoteIndex.version) {
     // We have newer state
     console.info('Sync local state');
 
