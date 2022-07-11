@@ -1,6 +1,6 @@
 import { Component, createSignal, onCleanup, Show } from 'solid-js';
 import ProjectsList from './ProjectsList';
-import { useStore } from './store';
+import { storeName, useStore } from './store';
 import QuestsView from './QuestsView';
 import tinykeys from 'tinykeys';
 import { validateEvent } from './utils';
@@ -21,9 +21,15 @@ const App: Component = () => {
 
   onCleanup(() => document.removeEventListener('visibilitychange', syncState));
 
+  const removeData = () => {
+    localStorage.removeItem(storeName);
+    window.location.reload();
+  };
+
   const cleanup = tinykeys(window, {
     h: validateEvent(() => setShowApp(!showApp())),
     c: validateEvent(() => setShowConfig(!showConfig())),
+    'b y e': validateEvent(removeData),
   });
 
   onCleanup(cleanup);

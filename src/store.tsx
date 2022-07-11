@@ -3,18 +3,18 @@ import { createStore, produce } from 'solid-js/store';
 import { Quest } from './types';
 import { getNewId } from './utils';
 
-const name = 'store';
+export const storeName = 'store';
 
 const StoreContext = createContext({});
 
-const localState = localStorage.getItem(name);
+const localState = localStorage.getItem(storeName);
 
 export const [state, setState] = createStore(
   localState ? JSON.parse(localState) : { version: 0 }
 );
 
 export function StoreProvider(props) {
-  createEffect(() => localStorage.setItem(name, JSON.stringify(state)));
+  createEffect(() => localStorage.setItem(storeName, JSON.stringify(state)));
 
   const store = [
     state,
