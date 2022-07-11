@@ -1,4 +1,4 @@
-import { Component, createSignal } from 'solid-js';
+import { Component, createSignal, Show } from 'solid-js';
 import { useStore } from './store';
 
 const Configuration: Component = () => {
@@ -8,7 +8,7 @@ const Configuration: Component = () => {
   const [region, setRegion] = createSignal(state?.s3?.region);
   const [apiKey, setApiKey] = createSignal(state?.s3?.apiKey);
   const [apiSecretKey, setApiSecretKey] = createSignal(state?.s3?.apiSecretKey);
-  const [secret, setSecret] = createSignal(state?.s3?.secret);
+  const [saved, setSaved] = createSignal(false);
 
   const onSubmit = (event) => {
     event.preventDefault();
@@ -17,8 +17,8 @@ const Configuration: Component = () => {
       region: region(),
       apiKey: apiKey(),
       apiSecretKey: apiSecretKey(),
-      secret: secret(),
     });
+    setSaved(true);
   };
 
   return (
@@ -71,7 +71,9 @@ const Configuration: Component = () => {
                     hover:shadow-none focus:outline-none"
         >
           <div class="relative">
-            <span>Save</span>
+            <Show when={saved()} fallback={<span>Save</span>}>
+              <span>Saved</span>
+            </Show>
           </div>
         </button>
       </form>
