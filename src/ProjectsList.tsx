@@ -38,7 +38,7 @@ const Projects: Component = () => {
     state.projectList?.filter((project) => !project.deleted) ?? [];
 
   return (
-    <div class="w-1/5 h-screen p-4 flex overflow-y-scroll">
+    <div class="w-1/5 h-screen p-4 flex overflow-y-auto">
       <div class="my-auto w-full">
         <For each={projects()}>
           {(project: any) => (
