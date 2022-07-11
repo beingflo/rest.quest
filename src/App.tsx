@@ -35,8 +35,10 @@ const App: Component = () => {
     addQuest('Add a new quest');
     addQuest('Check off the quest');
     addQuest('Add a new project');
+    addQuest('Toggle the view of quests');
     addQuest('Switch between projects');
     addQuest('Delete a project');
+    addQuest('Open the config');
   }
 
   return (
