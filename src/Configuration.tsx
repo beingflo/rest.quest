@@ -64,18 +64,6 @@ const Configuration: Component = () => {
             onChange={(event) => setApiSecretKey(event?.currentTarget?.value)}
           />
         </label>
-        <label class="block">
-          <span class="text-sm text-gray-700">
-            Encryption secret (optional)
-          </span>
-          <input
-            type="password"
-            class="focus:outline-none mt-0 block w-full border-0 border-b-2 border-gray-200 px-0.5 placeholder-gray-400 focus:border-gray-400 focus:ring-0"
-            placeholder="Enter a secret phrase"
-            value={secret()}
-            onChange={(event) => setSecret(event?.currentTarget?.value)}
-          />
-        </label>
         <button
           type="submit"
           class="mt-8 rounded-sm bg-white border border-black py-2
