@@ -18,6 +18,9 @@ const Help: Component = () => {
         <h1 class="text-2xl font-bold tracking-tight">rest.quest</h1>
       </div>
       <p class="mt-4">A tiny, opinionated todo list application.</p>
+      <p class="md:hidden mt-4 text-red-600">
+        Best enjoyed on a larger screen and with keyboard input, sorry!
+      </p>
       <p class="mt-4 mb-10">
         You're already in the application, press <b>h</b> to toggle the help
         screen!
