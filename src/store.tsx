@@ -22,6 +22,9 @@ export function StoreProvider(props) {
       toggleView() {
         setState({ view: !state.view });
       },
+      toggleHelp() {
+        setState({ help: !state.help });
+      },
       setSelectedProject(projectId: string) {
         setState({ selectedProject: projectId });
       },

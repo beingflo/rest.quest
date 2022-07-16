@@ -9,8 +9,8 @@ import Configuration from './Configuration';
 import { s3Sync } from './s3-utils';
 
 const App: Component = () => {
-  const [state, { newProject, setSelectedProject, addQuest }] = useStore();
-  const [showApp, setShowApp] = createSignal(!!state.projectList);
+  const [state, { newProject, setSelectedProject, addQuest, toggleHelp }] =
+    useStore();
   const [showConfig, setShowConfig] = createSignal(false);
 
   const syncState = () => {
@@ -27,7 +27,7 @@ const App: Component = () => {
   };
 
   const cleanup = tinykeys(window, {
-    h: validateEvent(() => setShowApp(!showApp())),
+    h: validateEvent(toggleHelp),
     c: validateEvent(() => setShowConfig(!showConfig())),
     'b y e': validateEvent(removeData),
   });
@@ -48,7 +48,7 @@ const App: Component = () => {
   }
 
   return (
-    <Show when={showApp()} fallback={<Help />}>
+    <Show when={state.help} fallback={<Help />}>
       <Show when={!showConfig()} fallback={<Configuration />}>
         <div class="flex flex-row">
           <ProjectsList />
