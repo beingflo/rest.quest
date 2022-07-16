@@ -1,7 +1,7 @@
 ## rest.quest
 
 A tiny, opinionated todo list application.
-Freely available at [rest.quest](rest.quest).
+Freely available at [rest.quest](https://rest.quest).
 
 ![Screenshot of rest.quest](assets/Screenshot%202022-07-16%20at%2017.57.59.png)
 
