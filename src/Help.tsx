@@ -12,7 +12,7 @@ const Help: Component = () => {
   };
 
   return (
-    <div class="max-w-2xl mt-12 mx-auto px-4">
+    <div class="max-w-2xl mt-4 md:mt-12 mx-auto px-4">
       <div class="flex flex-row gap-4 items-center">
         <Logo class="w-12 h-12" />
         <h1 class="text-2xl font-bold tracking-tight">rest.quest</h1>
