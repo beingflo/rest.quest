@@ -1,8 +1,11 @@
 ## rest.quest
 
 A tiny, opinionated todo list application.
+Freely available at [rest.quest](rest.quest).
 
 ![Screenshot of rest.quest](assets/Screenshot%202022-07-16%20at%2017.57.59.png)
+
+Tasks can be displayed in a traditional list, or a 2D grid. In the grid view, checked off tasks leave a gap to indicate progress in the project.
 
 ### Intended use
 
