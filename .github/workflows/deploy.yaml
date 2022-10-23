@@ -27,9 +27,12 @@ jobs:
         run: |
           yarn build
 
-      - name: Deploy
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./dist
-          cname: rest.quest
+      - name: Deploy to server
+        uses: easingthemes/ssh-deploy@main
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.OMNI_GH_KEY }}
+          SOURCE: 'dist/'
+          REMOTE_HOST: ${{ secrets.OMNI_HOST }}
+          REMOTE_USER: ${{ secrets.OMNI_USER }}
+          TARGET: '~/caddy/site/rest.quest/'
+          EXCLUDE: '/dist/, /node_modules/'
