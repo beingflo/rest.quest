@@ -132,6 +132,22 @@ export function StoreProvider(props) {
           })
         );
       },
+      compactProject(projectId: string) {
+        setState(
+          produce((state: any) => {
+            const project = state.projectMap[projectId];
+
+            if (project) {
+              const newQuests = project?.quests?.filter(
+                (quest) => !quest.complete
+              );
+              project.quests = newQuests;
+
+              state.version = state.version + 1;
+            }
+          })
+        );
+      },
     },
   ];
 

@@ -6,7 +6,7 @@ import { useStore } from './store';
 import { Quest as QuestType } from './types';
 
 const Quests: Component = () => {
-  const [state, { addQuest, toggleView }] = useStore();
+  const [state, { addQuest, toggleView, compactProject }] = useStore();
   const [newQuestMode, setNewQuestMode] = createSignal(false);
   const [newQuestName, setNewQuestName] = createSignal('');
 
@@ -21,6 +21,7 @@ const Quests: Component = () => {
     n: validateEvent(onEdit),
     Escape: () => setNewQuestMode(false),
     v: validateEvent(toggleView),
+    '$mod+e': validateEvent(() => compactProject(state.selectedProject)),
   });
 
   onCleanup(cleanup);

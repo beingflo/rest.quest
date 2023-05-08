@@ -34,6 +34,7 @@ const Help: Component = () => {
       <Instruction left="arrow up" right="Select previous project" />
       <Instruction left="arrow down" right="Select next project" />
       <Instruction left="ctrl+d" right="Delete selected project" />
+      <Instruction left="ctrl+e" right="Compact selected project" />
       <Instruction left="b y e" right="Purge all local data" />
 
       <h2 class="text-xl font-semibold mt-12">S3 synchronization and backup</h2>
