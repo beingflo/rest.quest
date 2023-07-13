@@ -1,5 +1,5 @@
-import { Component, createSignal, Show } from 'solid-js';
-import { useStore } from './store';
+import { Component, createSignal, Show } from "solid-js";
+import { useStore } from "./store";
 
 const Configuration: Component = () => {
   const [state, { setS3Config }] = useStore();
@@ -39,7 +39,7 @@ const Configuration: Component = () => {
           <input
             type="text"
             class="focus:outline-none mt-0 block w-full border-0 border-b-2 border-gray-200 px-0.5 placeholder-gray-400 focus:border-gray-400 focus:ring-0"
-            placeholder="Enter an S3 endpoint"
+            placeholder="Enter an S3 region"
             value={region()}
             onChange={(event) => setRegion(event?.currentTarget?.value)}
           />
