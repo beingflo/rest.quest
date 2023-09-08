@@ -1,5 +1,5 @@
-import { Component } from 'solid-js';
-import Logo from '../public/elephant.svg';
+import { Component } from "solid-js";
+import Logo from "../src/elephant.svg";
 
 const Help: Component = () => {
   const Instruction = (props) => {
