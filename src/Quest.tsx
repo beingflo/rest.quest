@@ -1,6 +1,6 @@
-import { Component } from 'solid-js';
-import { useStore } from './store';
-import { Quest as QuestType } from './types';
+import { Component } from "solid-js";
+import { useStore } from "./store";
+import { Quest as QuestType } from "./types";
 
 export type Props = {
   quest: QuestType;
@@ -17,9 +17,10 @@ const Quest: Component<Props> = (props: Props) => {
     <div class="group flex flex-row gap-1 items-baseline">
       <div
         onClick={onComplete}
-        class={`truncate cursor-pointer ${props.quest.complete && 'invisible'}`}
+        class={`truncate cursor-pointer ${props.quest.complete && "invisible"}`}
+        title={props.quest.name}
       >
-        {props.quest.name || 'unnamed'}
+        {props.quest.name || "unnamed"}
       </div>
     </div>
   );
