@@ -1,14 +1,23 @@
-import { Component, createSignal, For, onCleanup, Show } from 'solid-js';
-import Quest from './Quest';
-import tinykeys from 'tinykeys';
-import { validateEvent } from './utils';
-import { useStore } from './store';
-import { Quest as QuestType } from './types';
+import {
+  Component,
+  createEffect,
+  createSignal,
+  For,
+  onCleanup,
+  Show,
+} from "solid-js";
+import Quest from "./Quest";
+import tinykeys from "tinykeys";
+import { validateEvent } from "./utils";
+import { useStore } from "./store";
+import { Quest as QuestType } from "./types";
+
+const views = ["normal", "compact", "complete"];
 
 const Quests: Component = () => {
   const [state, { addQuest, toggleView, compactProject }] = useStore();
   const [newQuestMode, setNewQuestMode] = createSignal(false);
-  const [newQuestName, setNewQuestName] = createSignal('');
+  const [newQuestName, setNewQuestName] = createSignal("");
 
   let inputRef;
 
@@ -21,7 +30,7 @@ const Quests: Component = () => {
     n: validateEvent(onEdit),
     Escape: () => setNewQuestMode(false),
     v: validateEvent(toggleView),
-    '$mod+e': validateEvent(() => compactProject(state.selectedProject)),
+    "$mod+e": validateEvent(() => compactProject(state.selectedProject)),
   });
 
   onCleanup(cleanup);
@@ -51,40 +60,32 @@ const Quests: Component = () => {
       return [];
     }
 
-    if (!state.view) {
+    if (views[state.view] === "normal" || views[state.view] === "complete") {
       return currentProject?.quests ?? [];
-    } else {
+    }
+    if (views[state.view] === "compact") {
       return currentProject?.quests?.filter((quest) => !quest.complete) ?? [];
     }
+
+    return currentProject?.quests ?? [];
   };
 
   return (
-    <Show
-      when={!state.view}
-      fallback={
-        <div class="w-full">
-          <div class="mx-auto w-96 py-4">
-            <For each={quests()}>
-              {(quest) => <Quest quest={quest as QuestType} />}
-            </For>
-            <Show when={newQuestMode()}>
-              <NewQuestInput />
-            </Show>
-          </div>
-        </div>
-      }
-    >
-      <div class="w-full pt-4">
-        <div class="grid grid-cols-4 gap-1 gap-y-4">
-          <For each={quests()}>
-            {(quest) => <Quest quest={quest as QuestType} />}
-          </For>
-          <Show when={newQuestMode()}>
-            <NewQuestInput />
-          </Show>
-        </div>
+    <div class="w-full pt-4">
+      <div class="grid grid-cols-4 gap-1 gap-y-4">
+        <For each={quests()}>
+          {(quest) => (
+            <Quest
+              quest={quest as QuestType}
+              showCompleted={views[state.view] === "complete"}
+            />
+          )}
+        </For>
+        <Show when={newQuestMode()}>
+          <NewQuestInput />
+        </Show>
       </div>
-    </Show>
+    </div>
   );
 };
 

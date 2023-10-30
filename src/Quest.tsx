@@ -4,6 +4,7 @@ import { Quest as QuestType } from "./types";
 
 export type Props = {
   quest: QuestType;
+  showCompleted?: boolean;
 };
 
 const Quest: Component<Props> = (props: Props) => {
@@ -17,7 +18,12 @@ const Quest: Component<Props> = (props: Props) => {
     <div class="group flex flex-row gap-1 items-baseline">
       <div
         onClick={onComplete}
-        class={`truncate cursor-pointer ${props.quest.complete && "invisible"}`}
+        class={`truncate cursor-pointer ${
+          props.quest.complete &&
+          (props.showCompleted
+            ? "line-through text-gray-300 cursor-default"
+            : "invisible")
+        }`}
         title={props.quest.name}
       >
         {props.quest.name || "unnamed"}

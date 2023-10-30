@@ -1,9 +1,9 @@
-import { createContext, createEffect, useContext } from 'solid-js';
-import { createStore, produce } from 'solid-js/store';
-import { Quest } from './types';
-import { getNewId } from './utils';
+import { createContext, createEffect, useContext } from "solid-js";
+import { createStore, produce } from "solid-js/store";
+import { Quest } from "./types";
+import { getNewId } from "./utils";
 
-export const storeName = 'store';
+export const storeName = "store";
 
 const StoreContext = createContext({});
 
@@ -20,7 +20,7 @@ export function StoreProvider(props) {
     state,
     {
       toggleView() {
-        setState({ view: !state.view });
+        setState({ view: ((state.view ?? 0) + 1) % 3 });
       },
       toggleHelp() {
         setState({ help: !state.help });
@@ -31,14 +31,14 @@ export function StoreProvider(props) {
       setS3Config(config: Object) {
         setState({ s3: config });
       },
-      changeSelectedProject(direction: 'UP' | 'DOWN') {
+      changeSelectedProject(direction: "UP" | "DOWN") {
         setState(
           produce((state: any) => {
             const selectedProjectIndex = state.projectList.findIndex(
               (project) => project.id === state.selectedProject
             );
 
-            const newIndexDirection = direction === 'UP' ? -1 : 1;
+            const newIndexDirection = direction === "UP" ? -1 : 1;
             let newIndex = selectedProjectIndex;
             do {
               newIndex = newIndex + newIndexDirection;

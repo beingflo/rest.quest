@@ -30,7 +30,7 @@ const Help: Component = () => {
       <Instruction left="n" right="New quest in the current project" />
       <Instruction left="click on quest" right="Check off quest" />
       <Instruction left="c" right="Toggle configuration screen" />
-      <Instruction left="v" right="Toggle view of quests" />
+      <Instruction left="v" right="Cycle views of quests" />
       <Instruction left="arrow up" right="Select previous project" />
       <Instruction left="arrow down" right="Select next project" />
       <Instruction left="ctrl+d" right="Delete selected project" />
