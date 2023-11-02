@@ -1,7 +1,6 @@
 {
-  "name": "vite-template-solid",
-  "homepage": "https://beingflo.github.io/rest.quest",
-  "version": "0.0.0",
+  "name": "rest.quest",
+  "version": "0.0.1",
   "description": "",
   "scripts": {
     "dev": "vite",
