@@ -1,13 +1,14 @@
 export type Quest = {
   id: string;
   name: string;
-  complete?: boolean;
+  projectId: string;
+  createdAt: string;
+  completedAt?: string;
 };
 
 export type Project = {
   id: string;
-  name: string;
-  version: number;
-  created_at: Date;
-  quests: Array<Quest>;
+  createdAt: string;
+  modifiedAt: string;
+  deletedAt: string;
 };

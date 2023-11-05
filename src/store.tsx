@@ -2,6 +2,7 @@ import { createContext, createEffect, useContext } from "solid-js";
 import { createStore, produce } from "solid-js/store";
 import { Quest } from "./types";
 import { getNewId } from "./utils";
+import { migrateDataV2 } from "./store-utils";
 
 export const storeName = "store";
 
@@ -9,9 +10,13 @@ const StoreContext = createContext({});
 
 const localState = localStorage.getItem(storeName);
 
-export const [state, setState] = createStore(
-  localState ? JSON.parse(localState) : { version: 0 }
-);
+let parsedState = localState ? JSON.parse(localState) : { data_version: 2 };
+
+if (parsedState.data_version !== 2) {
+  parsedState = migrateDataV2(parsedState);
+}
+
+export const [state, setState] = createStore(parsedState);
 
 export function StoreProvider(props) {
   createEffect(() => localStorage.setItem(storeName, JSON.stringify(state)));
