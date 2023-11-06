@@ -3,6 +3,7 @@ export type Quest = {
   name: string;
   projectId: string;
   createdAt: string;
+  modifiedAt: string;
   completedAt?: string;
 };
 

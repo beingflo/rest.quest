@@ -1,8 +1,8 @@
 import { createContext, createEffect, useContext } from "solid-js";
 import { createStore, produce } from "solid-js/store";
-import { Quest } from "./types";
 import { getNewId } from "./utils";
 import { migrateDataV2 } from "./store-utils";
+import { s3Sync } from "./s3-utils";
 
 export const storeName = "store";
 
@@ -88,9 +88,11 @@ export function StoreProvider(props) {
               ?.filter((q) => q.projectId === projectId)
               ?.forEach((q) => {
                 q.completedAt = Date.now();
+                q.modifiedAt = Date.now();
               });
 
             selectedProject.deletedAt = Date.now();
+            selectedProject.modifiedAt = Date.now();
           })
         );
       },
@@ -112,6 +114,7 @@ export function StoreProvider(props) {
               name,
               projectId: state.selectedProject,
               createdAt: Date.now(),
+              modifiedAt: Date.now(),
               completedAt: null,
             },
           ],
@@ -123,6 +126,7 @@ export function StoreProvider(props) {
             const quest = state.questList?.find((q) => q.id === questId);
             if (quest) {
               quest.completedAt = Date.now();
+              quest.modifiedAt = Date.now();
             }
           })
         );
@@ -140,6 +144,19 @@ export function StoreProvider(props) {
             }
           })
         );
+      },
+      async syncState() {
+        const [newLocal, newRemote, droppedLocal, droppedRemote] = await s3Sync(
+          state
+        );
+
+        setTimeout(() => setState({ showToast: false }), 4000);
+
+        setState({
+          new: [newLocal, newRemote] ?? [0, 0],
+          dropped: [droppedLocal, droppedRemote] ?? [0, 0],
+          showToast: true,
+        });
       },
     },
   ];

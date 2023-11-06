@@ -8,8 +8,10 @@ import Help from "./Help";
 import Configuration from "./Configuration";
 
 const App: Component = () => {
-  const [state, { newProject, setSelectedProject, addQuest, toggleHelp }] =
-    useStore();
+  const [
+    state,
+    { newProject, setSelectedProject, addQuest, syncState, toggleHelp },
+  ] = useStore();
   const [showConfig, setShowConfig] = createSignal(false);
 
   const removeData = () => {
@@ -20,6 +22,7 @@ const App: Component = () => {
   const cleanup = tinykeys(window, {
     h: validateEvent(toggleHelp),
     c: validateEvent(() => setShowConfig(!showConfig())),
+    s: validateEvent(syncState),
     "b y e": validateEvent(removeData),
   });
 
