@@ -131,6 +131,17 @@ export function StoreProvider(props) {
           })
         );
       },
+      uncompleteQuest(questId: string) {
+        setState(
+          produce((state: any) => {
+            const quest = state.questList?.find((q) => q.id === questId);
+            if (quest) {
+              quest.completedAt = null;
+              quest.modifiedAt = Date.now();
+            }
+          })
+        );
+      },
       compactProject(projectId: string) {
         setState(
           produce((state: any) => {

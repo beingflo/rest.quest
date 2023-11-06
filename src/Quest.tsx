@@ -8,16 +8,20 @@ export type Props = {
 };
 
 const Quest: Component<Props> = (props: Props) => {
-  const [, { completeQuest }] = useStore();
+  const [, { completeQuest, uncompleteQuest }] = useStore();
 
-  const onComplete = () => {
-    completeQuest(props.quest.id);
+  const onClick = () => {
+    if (!props.quest.completedAt) {
+      completeQuest(props.quest.id);
+    } else {
+      uncompleteQuest(props.quest.id);
+    }
   };
 
   return (
     <div class="group flex flex-row gap-1 items-baseline">
       <div
-        onClick={onComplete}
+        onClick={onClick}
         class={`truncate cursor-pointer ${
           props.quest.completedAt &&
           (props.showCompleted
