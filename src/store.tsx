@@ -13,6 +13,7 @@ const localState = localStorage.getItem(storeName);
 let parsedState = localState ? JSON.parse(localState) : { data_version: 2 };
 
 if (parsedState.data_version !== 2) {
+  localStorage.setItem("store-bkb", JSON.stringify(parsedState));
   parsedState = migrateDataV2(parsedState);
 }
 

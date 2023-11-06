@@ -1,8 +1,6 @@
 import { StateV1, StateV2 } from "./types";
 
 export const migrateDataV2 = (state: StateV1): StateV2 => {
-  console.log("before:");
-  console.log(state);
   let quests = [];
   Object.values(state.projectMap)?.forEach((p) => {
     p.quests?.forEach((q) => {
@@ -11,6 +9,7 @@ export const migrateDataV2 = (state: StateV1): StateV2 => {
         name: q.name,
         projectId: p.id,
         createdAt: p.created_at,
+        modifiedAt: p.created_at,
         completedAt: q.complete ? Date.now() : null,
       });
     });
@@ -31,8 +30,6 @@ export const migrateDataV2 = (state: StateV1): StateV2 => {
     })),
     questList: quests,
   };
-  console.log("after:");
-  console.log(newState);
 
   return newState;
 };
