@@ -4,10 +4,12 @@ import { useStore } from "./store";
 const Configuration: Component = () => {
   const [state, { setS3Config }] = useStore();
 
-  const [endpoint, setEndpoint] = createSignal(state?.s3?.endpoint);
-  const [region, setRegion] = createSignal(state?.s3?.region);
-  const [apiKey, setApiKey] = createSignal(state?.s3?.apiKey);
-  const [apiSecretKey, setApiSecretKey] = createSignal(state?.s3?.apiSecretKey);
+  const [endpoint, setEndpoint] = createSignal(state?.s3?.endpoint ?? "");
+  const [region, setRegion] = createSignal(state?.s3?.region ?? "");
+  const [apiKey, setApiKey] = createSignal(state?.s3?.apiKey ?? "");
+  const [apiSecretKey, setApiSecretKey] = createSignal(
+    state?.s3?.apiSecretKey ?? ""
+  );
   const [saved, setSaved] = createSignal(false);
 
   const onSubmit = (event) => {
