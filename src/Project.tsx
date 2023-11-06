@@ -1,6 +1,6 @@
-import { Component } from 'solid-js';
-import { useStore } from './store';
-import { Project as ProjectType } from './types';
+import { Component } from "solid-js";
+import { useStore } from "./store";
+import { Project as ProjectType } from "./types";
 
 export type Props = {
   project: ProjectType;
@@ -18,10 +18,10 @@ const Project: Component<Props> = (props: Props) => {
       <div
         onClick={setSelection}
         class={`truncate cursor-pointer ${
-          state.selectedProject === props.project.id && 'underline'
+          state.selectedProject === props.project.id && "underline"
         }`}
       >
-        {props.project.name || 'unnamed'}
+        {props.project.name || "unnamed"}
       </div>
       <div
         onClick={() => deleteProject(props.project.id)}

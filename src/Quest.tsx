@@ -19,7 +19,7 @@ const Quest: Component<Props> = (props: Props) => {
       <div
         onClick={onComplete}
         class={`truncate cursor-pointer ${
-          props.quest.complete &&
+          props.quest.completedAt &&
           (props.showCompleted
             ? "line-through text-gray-300 cursor-default"
             : "invisible")

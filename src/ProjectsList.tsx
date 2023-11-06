@@ -1,8 +1,9 @@
-import { Component, createSignal, For, onCleanup, Show } from 'solid-js';
-import Project from './Project';
-import tinykeys from 'tinykeys';
-import { validateEvent } from './utils';
-import { useStore } from './store';
+import { Component, createSignal, For, onCleanup, Show } from "solid-js";
+import Project from "./Project";
+import tinykeys from "tinykeys";
+import { validateEvent } from "./utils";
+import { useStore } from "./store";
+import { Project as ProjectType } from "./types";
 
 const Projects: Component = () => {
   const [
@@ -10,7 +11,7 @@ const Projects: Component = () => {
     { newProject, setSelectedProject, changeSelectedProject, deleteProject },
   ] = useStore();
   const [newProjectMode, setNewProjectMode] = createSignal(false);
-  const [newProjectName, setNewProjectName] = createSignal('');
+  const [newProjectName, setNewProjectName] = createSignal("");
 
   let inputRef;
 
@@ -22,9 +23,9 @@ const Projects: Component = () => {
   const cleanup = tinykeys(window, {
     p: validateEvent(onEdit),
     Escape: () => setNewProjectMode(false),
-    ArrowUp: () => changeSelectedProject('UP'),
-    ArrowDown: () => changeSelectedProject('DOWN'),
-    '$mod+d': validateEvent(() => deleteProject(state.selectedProject)),
+    ArrowUp: () => changeSelectedProject("UP"),
+    ArrowDown: () => changeSelectedProject("DOWN"),
+    "$mod+d": validateEvent(() => deleteProject(state.selectedProject)),
   });
 
   onCleanup(cleanup);
@@ -38,17 +39,13 @@ const Projects: Component = () => {
   };
 
   const projects = () =>
-    state.projectList?.filter((project) => !project.deleted) ?? [];
+    state.projectList?.filter((project) => !project.deletedAt) ?? [];
 
   return (
     <div class="w-1/5 h-screen p-4 flex overflow-y-auto">
       <div class="my-auto w-full">
         <For each={projects()}>
-          {(project: any) => (
-            <Project
-              project={{ ...state.projectMap[project.id], id: project.id }}
-            />
-          )}
+          {(project: ProjectType) => <Project project={project} />}
         </For>
         <Show when={newProjectMode()}>
           <form onSubmit={onEditEnd}>

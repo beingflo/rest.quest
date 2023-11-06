@@ -53,7 +53,7 @@ export function StoreProvider(props) {
               if (newIndex >= state.projectList.length) {
                 newIndex = 0;
               }
-            } while (state.projectList[newIndex].deleted);
+            } while (state.projectList[newIndex].deletedAt);
 
             state.selectedProject = state.projectList[newIndex].id;
           })
@@ -65,19 +65,14 @@ export function StoreProvider(props) {
         setState({
           projectList: [
             ...(state.projectList ?? []),
-            { id, created_at: Date.now(), deleted: false },
-          ],
-          projectMap: {
-            ...state.projectMap,
-            [id]: {
+            {
               id,
               name: project,
-              version: 0,
-              created_at: Date.now(),
-              quests: [],
+              createdAt: Date.now(),
+              modifiedAt: Date.now(),
+              deletedAt: null,
             },
-          },
-          version: state.version + 1,
+          ],
         });
 
         return id;
@@ -89,66 +84,59 @@ export function StoreProvider(props) {
               (project) => project.id === projectId
             );
 
-            selectedProject.deleted = true;
+            state.questList
+              ?.filter((q) => q.projectId === projectId)
+              ?.forEach((q) => {
+                q.completedAt = Date.now();
+              });
 
-            delete state.projectMap[projectId];
-
-            state.version = state.version + 1;
+            selectedProject.deletedAt = Date.now();
           })
         );
       },
       addQuest(name: string) {
         if (
           !state.selectedProject ||
-          !state.projectMap[state.selectedProject]
+          !state.projectList?.find(
+            (project) => project.id === state.selectedProject
+          )
         ) {
           return;
         }
 
-        setState(
-          produce((state: any) => {
-            state.projectMap[state.selectedProject].version += 1;
-            state.projectMap[state.selectedProject].quests.push({
+        setState({
+          questList: [
+            ...(state.questList ?? []),
+            {
               id: getNewId(),
               name,
-              created_at: Date.now(),
-            });
-            state.version = state.version + 1;
-          })
-        );
+              projectId: state.selectedProject,
+              createdAt: Date.now(),
+              completedAt: null,
+            },
+          ],
+        });
       },
       completeQuest(questId: string) {
         setState(
           produce((state: any) => {
-            Object.entries(state.projectMap).map(
-              ([projectId, project]: any) => {
-                const quest = project.quests.find(
-                  (quest: Quest) => quest.id === questId
-                );
-
-                if (quest) {
-                  quest.complete = true;
-                  state.projectMap[projectId].version += 1;
-                }
-              }
-            );
-
-            state.version = state.version + 1;
+            const quest = state.questList?.find((q) => q.id === questId);
+            if (quest) {
+              quest.completedAt = Date.now();
+            }
           })
         );
       },
       compactProject(projectId: string) {
         setState(
           produce((state: any) => {
-            const project = state.projectMap[projectId];
+            const project = state.projectList?.find((p) => p.id === projectId);
 
-            if (project) {
-              const newQuests = project?.quests?.filter(
-                (quest) => !quest.complete
+            if (project && !project.deletedAt) {
+              const newQuests = state?.questList?.filter(
+                (quest) => quest.projectId !== projectId || !quest.completedAt
               );
-              project.quests = newQuests;
-
-              state.version = state.version + 1;
+              state.questList = newQuests;
             }
           })
         );

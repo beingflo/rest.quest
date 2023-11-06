@@ -54,20 +54,15 @@ const Quests: Component = () => {
   );
 
   const quests = () => {
-    const currentProject = state.projectMap[state.selectedProject];
+    const questsInProject = state.questList?.filter(
+      (q) => q.projectId === state.selectedProject
+    );
 
-    if (!currentProject) {
-      return [];
-    }
-
-    if (views[state.view] === "normal" || views[state.view] === "complete") {
-      return currentProject?.quests ?? [];
-    }
     if (views[state.view] === "compact") {
-      return currentProject?.quests?.filter((quest) => !quest.complete) ?? [];
+      return questsInProject?.filter((quest) => !quest.completedAt) ?? [];
     }
 
-    return currentProject?.quests ?? [];
+    return questsInProject ?? [];
   };
 
   return (
