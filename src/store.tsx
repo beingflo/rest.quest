@@ -150,13 +150,15 @@ export function StoreProvider(props) {
           state
         );
 
-        setTimeout(() => setState({ showToast: false }), 4000);
+        if (state?.s3) {
+          setTimeout(() => setState({ showToast: false }), 4000);
 
-        setState({
-          new: [newLocal, newRemote] ?? [0, 0],
-          dropped: [droppedLocal, droppedRemote] ?? [0, 0],
-          showToast: true,
-        });
+          setState({
+            new: [newLocal, newRemote] ?? [0, 0],
+            dropped: [droppedLocal, droppedRemote] ?? [0, 0],
+            showToast: true,
+          });
+        }
       },
     },
   ];

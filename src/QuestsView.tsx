@@ -8,7 +8,8 @@ import { Quest as QuestType } from "./types";
 const views = ["normal", "compact", "complete"];
 
 const Quests: Component = () => {
-  const [state, { addQuest, toggleView, compactProject }] = useStore();
+  const [state, { addQuest, toggleView, compactProject, syncState }] =
+    useStore();
   const [newQuestMode, setNewQuestMode] = createSignal(false);
   const [newQuestName, setNewQuestName] = createSignal("");
 
@@ -33,6 +34,7 @@ const Quests: Component = () => {
 
     addQuest(newQuestName());
     setNewQuestMode(false);
+    syncState();
   };
 
   const NewQuestInput = () => (
