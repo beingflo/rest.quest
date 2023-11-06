@@ -1,13 +1,6 @@
-import {
-  Component,
-  createEffect,
-  createSignal,
-  For,
-  onCleanup,
-  Show,
-} from "solid-js";
+import { Component, createSignal, For, onCleanup, Show } from "solid-js";
 import Quest from "./Quest";
-import tinykeys from "tinykeys";
+import { tinykeys } from "tinykeys";
 import { validateEvent } from "./utils";
 import { useStore } from "./store";
 import { Quest as QuestType } from "./types";

@@ -1,6 +1,6 @@
 import { Component, createSignal, For, onCleanup, Show } from "solid-js";
 import Project from "./Project";
-import tinykeys from "tinykeys";
+import { tinykeys } from "tinykeys";
 import { validateEvent } from "./utils";
 import { useStore } from "./store";
 import { Project as ProjectType } from "./types";

@@ -2,7 +2,7 @@ import { Component, createSignal, onCleanup, Show } from "solid-js";
 import ProjectsList from "./ProjectsList";
 import { storeName, useStore } from "./store";
 import QuestsView from "./QuestsView";
-import tinykeys from "tinykeys";
+import { tinykeys } from "tinykeys";
 import { validateEvent } from "./utils";
 import Help from "./Help";
 import Configuration from "./Configuration";
