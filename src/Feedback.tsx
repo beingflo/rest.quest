@@ -11,9 +11,6 @@ export const Feedback = () => {
     event.preventDefault();
     setSending(true);
 
-    const urlParams = new URLSearchParams(window.location.search);
-    const path = urlParams.get("path");
-
     setNotification("");
     const response = await fetch("https://feedback.marending.dev/feedback", {
       method: "POST",
@@ -22,7 +19,7 @@ export const Feedback = () => {
         project: "rest.quest",
         email: email(),
         content: content(),
-        path,
+        path: "",
       }),
     })
       .then((response) => {
