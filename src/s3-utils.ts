@@ -19,15 +19,10 @@ export const s3Sync = async (state: any) => {
   console.info("Sync state");
 
   let remoteState = { questList: [], projectList: [] };
-  try {
-    const stateResponse = await aws.fetch(
-      `${state?.s3?.endpoint}${StateFile}`,
-      {
-        method: "GET",
-      }
-    );
-    remoteState = await stateResponse.json();
-  } catch {}
+  const stateResponse = await aws.fetch(`${state?.s3?.endpoint}${StateFile}`, {
+    method: "GET",
+  });
+  remoteState = await stateResponse.json();
 
   const [mergedProjects, newLocal, newRemote, droppedLocal, droppedRemote] =
     mergeState(state.projectList, remoteState.projectList);

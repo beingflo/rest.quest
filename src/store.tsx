@@ -3,6 +3,7 @@ import { createStore, produce } from "solid-js/store";
 import { getNewId } from "./utils";
 import { migrateDataV2 } from "./store-utils";
 import { s3Sync } from "./s3-utils";
+import { setEphemeralStore } from "./ephemeralStore";
 
 export const storeName = "store";
 
@@ -163,9 +164,9 @@ export function StoreProvider(props) {
         );
 
         if (state?.s3) {
-          setTimeout(() => setState({ showToast: false }), 4000);
+          setTimeout(() => setEphemeralStore({ showToast: false }), 4000);
 
-          setState({
+          setEphemeralStore({
             new: [newLocal, newRemote] ?? [0, 0],
             dropped: [droppedLocal, droppedRemote] ?? [0, 0],
             showToast: true,
