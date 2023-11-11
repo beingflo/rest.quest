@@ -7,6 +7,7 @@ import { validateEvent } from "./utils";
 import Help from "./Help";
 import Configuration from "./Configuration";
 import { ephemeralStore } from "./ephemeralStore";
+import { Feedback } from "./Feedback";
 
 const App: Component = () => {
   const [
@@ -22,6 +23,7 @@ const App: Component = () => {
   const cleanup = tinykeys(window, {
     h: validateEvent(() => cycleScreen("help")),
     c: validateEvent(() => cycleScreen("config")),
+    f: validateEvent(() => cycleScreen("feedback")),
     s: validateEvent(syncState),
     "b y e": validateEvent(removeData),
   });
@@ -70,6 +72,9 @@ const App: Component = () => {
       </Match>
       <Match when={state.screen === "config"}>
         <Configuration />
+      </Match>
+      <Match when={state.screen === "feedback"}>
+        <Feedback />
       </Match>
     </Switch>
   );

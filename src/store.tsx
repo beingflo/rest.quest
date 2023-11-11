@@ -29,7 +29,7 @@ export function StoreProvider(props) {
       toggleView() {
         setState({ view: ((state.view ?? 0) + 1) % 3 });
       },
-      cycleScreen(screen: "help" | "config" | "app") {
+      cycleScreen(screen: "help" | "config" | "app" | "feedback") {
         const currentScreen = state.screen;
         let newScreen = "app";
         if (currentScreen !== screen) {

@@ -25,11 +25,12 @@ const Help: Component = () => {
         You're already in the application, press <b>h</b> to toggle the help
         screen!
       </p>
-      <Instruction left="h" right="Toggle help screen" />
+      <Instruction left="h" right="Show help screen" />
+      <Instruction left="f" right="Show feedback screen" />
       <Instruction left="p" right="New project" />
       <Instruction left="n" right="New quest in the current project" />
       <Instruction left="click on quest" right="Check off quest" />
-      <Instruction left="c" right="Toggle configuration screen" />
+      <Instruction left="c" right="Show configuration screen" />
       <Instruction left="v" right="Cycle views of quests" />
       <Instruction left="arrow up" right="Select previous project" />
       <Instruction left="arrow down" right="Select next project" />
