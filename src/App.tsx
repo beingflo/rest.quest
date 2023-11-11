@@ -1,4 +1,4 @@
-import { Component, createSignal, onCleanup, Show } from "solid-js";
+import { Component, Match, onCleanup, Show, Switch } from "solid-js";
 import ProjectsList from "./ProjectsList";
 import { storeName, useStore } from "./store";
 import QuestsView from "./QuestsView";
@@ -11,9 +11,8 @@ import { ephemeralStore } from "./ephemeralStore";
 const App: Component = () => {
   const [
     state,
-    { newProject, setSelectedProject, addQuest, syncState, toggleHelp },
+    { newProject, setSelectedProject, addQuest, syncState, cycleScreen },
   ] = useStore();
-  const [showConfig, setShowConfig] = createSignal(false);
 
   const removeData = () => {
     localStorage.removeItem(storeName);
@@ -21,8 +20,8 @@ const App: Component = () => {
   };
 
   const cleanup = tinykeys(window, {
-    h: validateEvent(toggleHelp),
-    c: validateEvent(() => setShowConfig(!showConfig())),
+    h: validateEvent(() => cycleScreen("help")),
+    c: validateEvent(() => cycleScreen("config")),
     s: validateEvent(syncState),
     "b y e": validateEvent(removeData),
   });
@@ -43,27 +42,36 @@ const App: Component = () => {
   }
 
   return (
-    <Show when={state.help} fallback={<Help />}>
-      <Show when={!showConfig()} fallback={<Configuration />}>
-        <div class="flex flex-row">
-          <ProjectsList />
-          <QuestsView />
-        </div>
-        <Show when={ephemeralStore?.showToast}>
-          <div class="fixed bottom-0 right-0 grid gap-x-2 grid-cols-2 bg-white p-2 font-light text-sm">
-            <p class="text-right">new</p>
-            <p>
-              {ephemeralStore?.new[0]} local, {ephemeralStore?.new[1]} remote
-            </p>
-            <p class="text-right">old</p>
-            <p>
-              {ephemeralStore?.dropped[0]} local, {ephemeralStore?.dropped[1]}{" "}
-              remote
-            </p>
+    <Switch
+      fallback={
+        <>
+          <div class="flex flex-row">
+            <ProjectsList />
+            <QuestsView />
           </div>
-        </Show>
-      </Show>
-    </Show>
+          <Show when={ephemeralStore?.showToast}>
+            <div class="fixed bottom-0 right-0 grid gap-x-2 grid-cols-2 bg-white p-2 font-light text-sm">
+              <p class="text-right">new</p>
+              <p>
+                {ephemeralStore?.new[0]} local, {ephemeralStore?.new[1]} remote
+              </p>
+              <p class="text-right">old</p>
+              <p>
+                {ephemeralStore?.dropped[0]} local, {ephemeralStore?.dropped[1]}{" "}
+                remote
+              </p>
+            </div>
+          </Show>
+        </>
+      }
+    >
+      <Match when={state.screen === "help"}>
+        <Help />
+      </Match>
+      <Match when={state.screen === "config"}>
+        <Configuration />
+      </Match>
+    </Switch>
   );
 };
 

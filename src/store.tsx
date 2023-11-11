@@ -29,8 +29,13 @@ export function StoreProvider(props) {
       toggleView() {
         setState({ view: ((state.view ?? 0) + 1) % 3 });
       },
-      toggleHelp() {
-        setState({ help: !state.help });
+      cycleScreen(screen: "help" | "config" | "app") {
+        const currentScreen = state.screen;
+        let newScreen = "app";
+        if (currentScreen !== screen) {
+          newScreen = screen;
+        }
+        setState({ screen: newScreen });
       },
       setSelectedProject(projectId: string) {
         setState({ selectedProject: projectId });
