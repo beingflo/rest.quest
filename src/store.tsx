@@ -155,10 +155,14 @@ export function StoreProvider(props) {
             const project = state.projectList?.find((p) => p.id === projectId);
 
             if (project && !project.deletedAt) {
-              const newQuests = state?.questList?.filter(
-                (quest) => quest.projectId !== projectId || !quest.completedAt
-              );
-              state.questList = newQuests;
+              state?.questList
+                ?.filter((q) => q.projectId === projectId)
+                ?.forEach((quest) => {
+                  if (quest.completedAt) {
+                    quest.deletedAt = Date.now();
+                    quest.modifiedAt = Date.now();
+                  }
+                });
             }
           })
         );

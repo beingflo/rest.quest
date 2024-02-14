@@ -49,9 +49,9 @@ const Quests: Component = () => {
   );
 
   const quests = () => {
-    const questsInProject = state.questList?.filter(
-      (q) => q.projectId === state.selectedProject
-    );
+    const questsInProject = state.questList
+      ?.filter((q) => q.projectId === state.selectedProject)
+      ?.filter((q) => !q.deletedAt);
 
     if (views[state.view] === "compact") {
       return questsInProject?.filter((quest) => !quest.completedAt) ?? [];
