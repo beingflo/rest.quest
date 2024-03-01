@@ -13,25 +13,24 @@ This web application has been developed to be used on a desktop browser. It keep
 
 ### How to use
 
-| Command        | Description                  |
-| -------------- | ---------------------------- |
-| h              | Toggle help screen           |
-| p              | New project                  |
-| n              | New quest in current project |
-| click on quest | Check off quest              |
-| c              | Toggle configuration screen  |
-| v              | Toggle view of quests        |
-| arrow up       | Select previous project      |
-| arrow down     | Select next project          |
-| ctrl+d         | Delete selected project      |
-| b y e          | Purge all local data         |
+| Command        | Description                                 |
+| -------------- | ------------------------------------------- |
+| h              | Toggle help screen                          |
+| p              | New project                                 |
+| n              | New quest in current project                |
+| click on quest | Check off quest                             |
+| c              | Toggle configuration screen                 |
+| s              | Synchronize state with remote if configured |
+| v              | Toggle view of quests                       |
+| arrow up       | Select previous project                     |
+| arrow down     | Select next project                         |
+| ctrl+d         | Delete selected project                     |
+| b y e          | Purge all local data                        |
 
 ### S3 synchronization
 
-Add your S3 credentials on the config screen (press c). Any data added here never leaves your browsers localstorage. The application will synchronize the local state to the remote bucket whenever the window gains or loses focus.
-To determine which state is newer, the application compares a single, global `version` field between the local and the remote state. It then either pushes the full local state to the bucket or replaces the local state with the remote state as appropriate.
-
-**Warning:** If a device does not get the chance to synchronize its state to the bucket due to missing connectivity or other circumstances, data loss may well occur due to state overwriting. There is **no** sophisticated merging of remote and local state.
+Add your S3 credentials on the config screen (press c). Any data added here never leaves your browsers local storage. The application will synchronize the local state to the remote bucket whenever a new quest is added, or after pressing s.
+During synchronization, a merge of local quests and projects with remote ones is performed based on recency of modification. This way, it is quite unlikely to run into data loss even when using two instances of the application concurrently and occasionally synchronizing their state .
 
 #### Configuration
 

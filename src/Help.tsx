@@ -31,6 +31,10 @@ const Help: Component = () => {
       <Instruction left="n" right="New quest in the current project" />
       <Instruction left="click on quest" right="Check off quest" />
       <Instruction left="c" right="Show configuration screen" />
+      <Instruction
+        left="s"
+        right="Synchronize state with remote if configured"
+      />
       <Instruction left="v" right="Cycle views of quests" />
       <Instruction left="arrow up" right="Select previous project" />
       <Instruction left="arrow down" right="Select next project" />
@@ -42,8 +46,8 @@ const Help: Component = () => {
       <p class="mt-4 pb-10">
         In the configuration of this app, you can add an endpoint and
         credentials for an S3 provider. If this is provided, the application
-        will synchronize the local state with the S3 bucket when gaining or
-        losing focus.
+        will synchronize the local state with the S3 bucket after creating new
+        quests, or pressing <b>s</b>.
       </p>
     </div>
   );
