@@ -1,4 +1,4 @@
-import { Component } from "solid-js";
+import { Component, Show, createSignal } from "solid-js";
 import { useStore } from "./store";
 import { Project as ProjectType } from "./types";
 
@@ -8,6 +8,7 @@ export type Props = {
 
 const Project: Component<Props> = (props: Props) => {
   const [state, { setSelectedProject, deleteProject }] = useStore();
+  const [showDelConfirm, setShowDelConfirm] = createSignal(false);
 
   const setSelection = () => {
     setSelectedProject(props.project.id);
@@ -24,11 +25,19 @@ const Project: Component<Props> = (props: Props) => {
         {props.project.name || "unnamed"}
       </div>
       <div
-        onClick={() => deleteProject(props.project.id)}
+        onClick={() => setShowDelConfirm((old) => !old)}
         class="hidden group-hover:block text-xs text-gray-600 hover:cursor-pointer"
       >
         Del
       </div>
+      <Show when={showDelConfirm()} fallback={null}>
+        <div
+          onClick={() => deleteProject(props.project.id)}
+          class="hidden group-hover:block text-xs text-red-600 hover:cursor-pointer"
+        >
+          Confirm
+        </div>
+      </Show>
     </div>
   );
 };
