@@ -149,6 +149,17 @@ export function StoreProvider(props) {
           })
         );
       },
+      renameQuest(questId: string, newName: string) {
+        setState(
+          produce((state: any) => {
+            const quest = state.questList?.find((q) => q.id === questId);
+            if (quest) {
+              quest.name = newName;
+              quest.modifiedAt = Date.now();
+            }
+          })
+        );
+      },
       compactProject(projectId: string) {
         setState(
           produce((state: any) => {
