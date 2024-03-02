@@ -30,7 +30,7 @@ This web application has been developed to be used on a desktop browser. It keep
 ### S3 synchronization
 
 Add your S3 credentials on the config screen (press c). Any data added here never leaves your browsers local storage. The application will synchronize the local state to the remote bucket whenever a new quest is added, or after pressing s.
-During synchronization, a merge of local quests and projects with remote ones is performed based on recency of modification. This way, it is quite unlikely to run into data loss even when using two instances of the application concurrently and occasionally synchronizing their state .
+During synchronization, a merge of local quests and projects with remote ones is performed based on recency of modification. This way, it is quite unlikely to run into data loss even when using two instances of the application concurrently and occasionally synchronizing their state.
 
 #### Configuration
 
