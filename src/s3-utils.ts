@@ -21,6 +21,7 @@ export const s3Sync = async (state: any) => {
   let remoteState = { questList: [], projectList: [] };
   const stateResponse = await aws.fetch(`${state?.s3?.endpoint}${StateFile}`, {
     method: "GET",
+    headers: { "Cache-Control": "no-store" },
   });
   remoteState = await stateResponse.json();
 
