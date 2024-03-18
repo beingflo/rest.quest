@@ -38,7 +38,6 @@ const Help: Component = () => {
       <Instruction left="v" right="Cycle views of quests" />
       <Instruction left="arrow up" right="Select previous project" />
       <Instruction left="arrow down" right="Select next project" />
-      <Instruction left="ctrl+d" right="Delete selected project" />
       <Instruction left="ctrl+e" right="Compact selected project" />
       <Instruction left="b y e" right="Purge all local data" />
 

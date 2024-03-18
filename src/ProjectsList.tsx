@@ -6,10 +6,8 @@ import { useStore } from "./store";
 import { Project as ProjectType } from "./types";
 
 const Projects: Component = () => {
-  const [
-    state,
-    { newProject, setSelectedProject, changeSelectedProject, deleteProject },
-  ] = useStore();
+  const [state, { newProject, setSelectedProject, changeSelectedProject }] =
+    useStore();
   const [newProjectMode, setNewProjectMode] = createSignal(false);
   const [newProjectName, setNewProjectName] = createSignal("");
 
@@ -25,7 +23,6 @@ const Projects: Component = () => {
     Escape: () => setNewProjectMode(false),
     ArrowUp: () => changeSelectedProject("UP"),
     ArrowDown: () => changeSelectedProject("DOWN"),
-    "$mod+d": validateEvent(() => deleteProject(state.selectedProject)),
   });
 
   onCleanup(cleanup);
