@@ -47,7 +47,7 @@ const App: Component = () => {
     <Switch
       fallback={
         <>
-          <div class="flex flex-row">
+          <div class="flex flex-row pr-4">
             <ProjectsList />
             <QuestsView />
           </div>
