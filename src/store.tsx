@@ -11,7 +11,9 @@ const StoreContext = createContext({});
 
 const localState = localStorage.getItem(storeName);
 
-let parsedState = localState ? JSON.parse(localState) : { data_version: 2 };
+let parsedState = localState
+  ? JSON.parse(localState)
+  : { data_version: 2, screen: "help" };
 
 if (parsedState.data_version !== 2) {
   localStorage.setItem("store-bkb", JSON.stringify(parsedState));
