@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 die() { echo "$*" 1>&2 ; exit 1; }
 
-echo -e "Deploying jour.rest.quest to production!"
+echo -e "Deploying rest.quest to production!"
 
 [ -z "$(git status --porcelain)" ] || die "There are uncommitted changes"
 
